@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:8.0.29
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: algafood
+    ports:
+      - 3306:3306
+    networks:
+      - algafood-network
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: mailhog-algafood-api
+    ports:
+      - "1025:1025"
+      - "8025:8025" 
+    networks:
+      - algafood-network
+networks:
+  algafood-network:
+    driver: bridge

@@ -1,0 +1,75 @@
+package com.algaworks.algafood.api.controller;
+
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.algaworks.algafood.api.assembler.FormaPagamentoInputDisassembler;
+import com.algaworks.algafood.api.assembler.FormaPagamentoModelAssembler;
+import com.algaworks.algafood.api.model.input.FormaPagamentoInput;
+import com.algaworks.algafood.domain.repository.FormaPagamentoRepository;
+import com.algaworks.algafood.domain.service.CadastroFormaPagamentoService;
+
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping("/formas-pagamento")
+public class FormaPagamentoController {
+	private final FormaPagamentoRepository formaPagamentoRepository;
+	private final CadastroFormaPagamentoService cadastroFormaPagamentoService;
+	private final FormaPagamentoModelAssembler formaPagamentoModelAssembler;
+	private final FormaPagamentoInputDisassembler formaPagamentoInputDisassembler;
+
+	public FormaPagamentoController(FormaPagamentoRepository formaPagamentoRepository,
+			CadastroFormaPagamentoService cadastroFormaPagamentoService,
+			FormaPagamentoModelAssembler formaPagamentoModelAssembler,
+			FormaPagamentoInputDisassembler formaPagamentoInputDisassembler) {
+		this.formaPagamentoRepository = formaPagamentoRepository;
+		this.cadastroFormaPagamentoService = cadastroFormaPagamentoService;
+		this.formaPagamentoModelAssembler = formaPagamentoModelAssembler;
+		this.formaPagamentoInputDisassembler = formaPagamentoInputDisassembler;
+	}
+
+	@GetMapping
+	public ResponseEntity<List<?>> listar() {
+		return ResponseEntity
+				.ok(this.formaPagamentoModelAssembler.toCollectionModel(this.formaPagamentoRepository.findAll()));
+	}
+
+	@GetMapping("/{formaPagamentoId}")
+	public ResponseEntity<?> buscar(@PathVariable Long formaPagamentoId) {
+		return ResponseEntity.ok(this.formaPagamentoModelAssembler
+				.toModel(this.cadastroFormaPagamentoService.buscarOuFalhar(formaPagamentoId)));
+	}
+
+	@PostMapping
+	public ResponseEntity<?> adicionar(@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(this.formaPagamentoModelAssembler.toModel(this.cadastroFormaPagamentoService
+						.salvar(this.formaPagamentoInputDisassembler.toDomainObject(formaPagamentoInput))));
+	}
+
+	@PutMapping("/{formaPagamentoId}")
+	public ResponseEntity<?> atualizar(@PathVariable Long formaPagamentoId,
+			@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
+		var formaPagamentoAtual = this.cadastroFormaPagamentoService.buscarOuFalhar(formaPagamentoId);
+		this.formaPagamentoInputDisassembler.copyToDomainObject(formaPagamentoInput, formaPagamentoAtual);
+		return ResponseEntity.ok(this.formaPagamentoModelAssembler
+				.toModel(this.cadastroFormaPagamentoService.salvar(formaPagamentoAtual)));
+	}
+
+	@DeleteMapping("/{formaPagamentoId}")
+	public ResponseEntity<?> remover(@PathVariable Long formaPagamentoId) {
+		this.cadastroFormaPagamentoService.excluir(formaPagamentoId);
+		return ResponseEntity.noContent().build();
+	}
+}

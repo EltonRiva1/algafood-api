@@ -1,0 +1,49 @@
+package com.algaworks.algafood.infrastructure.service.query;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+import com.algaworks.algafood.api.model.dto.VendaDiaria;
+import com.algaworks.algafood.domain.filter.VendaDiariaFilter;
+import com.algaworks.algafood.domain.model.Pedido;
+import com.algaworks.algafood.domain.model.StatusPedido;
+import com.algaworks.algafood.domain.service.VendaQueryService;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.Predicate;
+
+@Repository
+public class VendaQueryServiceImpl implements VendaQueryService {
+	@PersistenceContext
+	private EntityManager entityManager;
+
+	@Override
+	public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter vendaDiariaFilter, String timeOffset) {
+		var builder = this.entityManager.getCriteriaBuilder();
+		var query = builder.createQuery(VendaDiaria.class);
+		var root = query.from(Pedido.class);
+		var predicates = new ArrayList<>();
+		var functionConvertTzDataCriacao = builder.function("convert_tz", LocalDate.class, root.get("dataCriacao"),
+				builder.literal("+00:00"), builder.literal(timeOffset));
+		var functionDateDataCriacao = builder.function("date", LocalDate.class, functionConvertTzDataCriacao);
+		var selection = builder.construct(VendaDiaria.class, functionDateDataCriacao, builder.count(root.get("id")),
+				builder.sum(root.get("valorTotal")));
+		if (vendaDiariaFilter.getRestauranteId() != null)
+			predicates.add(builder.equal(root.get("restaurante").get("id"), vendaDiariaFilter.getRestauranteId()));
+		if (vendaDiariaFilter.getDataCriacaoInicio() != null)
+			predicates.add(
+					builder.greaterThanOrEqualTo(root.get("dataCriacao"), vendaDiariaFilter.getDataCriacaoInicio()));
+		if (vendaDiariaFilter.getDataCriacaoFim() != null)
+			predicates.add(builder.lessThanOrEqualTo(root.get("dataCriacao"), vendaDiariaFilter.getDataCriacaoFim()));
+		predicates.add(root.get("status").in(StatusPedido.CONFIRMADO, StatusPedido.ENTREGUE));
+		query.select(selection);
+		query.where(predicates.toArray(new Predicate[0]));
+		query.groupBy(functionDateDataCriacao);
+		return this.entityManager.createQuery(query).getResultList();
+	}
+
+}
