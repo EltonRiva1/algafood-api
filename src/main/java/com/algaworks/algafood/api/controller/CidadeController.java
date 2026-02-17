@@ -18,10 +18,13 @@ import com.algaworks.algafood.api.model.input.CidadeInput;
 import com.algaworks.algafood.domain.repository.CidadeRepository;
 import com.algaworks.algafood.domain.service.CadastroCidadeService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/cidades")
+@Tag(name = "Cidades", description = "Gerencia as cidades")
 public class CidadeController {
 	private final CidadeRepository cidadeRepository;
 	private final CadastroCidadeService cadastroCidadeService;
@@ -37,23 +40,27 @@ public class CidadeController {
 	}
 
 	@GetMapping
+	@Operation(summary = "Lista as cidades")
 	public ResponseEntity<List<?>> listar() {
 		return ResponseEntity.ok(this.cidadeModelAssembler.toCollectionModel(this.cidadeRepository.findAll()));
 	}
 
 	@GetMapping("/{cidadeId}")
+	@Operation(summary = "Busca uma cidade por ID")
 	public ResponseEntity<?> buscar(@PathVariable Long cidadeId) {
 		return ResponseEntity
 				.ok(this.cidadeModelAssembler.toModel(this.cadastroCidadeService.buscarOuFalhar(cidadeId)));
 	}
 
 	@PostMapping
+	@Operation(summary = "Cadastra uma cidade")
 	public ResponseEntity<?> adicionar(@RequestBody @Valid CidadeInput cidadeInput) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(this.cidadeModelAssembler
 				.toModel(this.cadastroCidadeService.salvar(this.cidadeInputDisassembler.toDomainObject(cidadeInput))));
 	}
 
 	@PutMapping("/{cidadeId}")
+	@Operation(summary = "Atualiza uma cidade por ID")
 	public ResponseEntity<?> atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeInput cidadeInput) {
 		var cidadeAtual = this.cadastroCidadeService.buscarOuFalhar(cidadeId);
 		this.cidadeInputDisassembler.copyToDomainObject(cidadeInput, cidadeAtual);
@@ -61,6 +68,7 @@ public class CidadeController {
 	}
 
 	@DeleteMapping("/{cidadeId}")
+	@Operation(summary = "Exclui uma cidade por ID")
 	public ResponseEntity<?> remover(@PathVariable Long cidadeId) {
 		this.cadastroCidadeService.excluir(cidadeId);
 		return ResponseEntity.noContent().build();
