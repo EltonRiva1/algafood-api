@@ -1,6 +1,9 @@
 package com.algaworks.algafood.domain.model;
 
+import java.time.OffsetDateTime;
 import java.util.Objects;
+
+import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,6 +18,8 @@ public class FormaPagamento {
 	private Long id;
 	@Column(nullable = false)
 	private String descricao;
+	@UpdateTimestamp
+	private OffsetDateTime dataAtualizacao;
 
 	public Long getId() {
 		return id;
@@ -30,6 +35,14 @@ public class FormaPagamento {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public OffsetDateTime getDataAtualizacao() {
+		return dataAtualizacao;
+	}
+
+	public void setDataAtualizacao(OffsetDateTime dataAtualizacao) {
+		this.dataAtualizacao = dataAtualizacao;
 	}
 
 	@Override
@@ -51,6 +64,6 @@ public class FormaPagamento {
 
 	@Override
 	public String toString() {
-		return "FormaPagamento [id=" + id + ", descricao=" + descricao + "]";
+		return "FormaPagamento [id=" + id + ", descricao=" + descricao + ", dataAtualizacao=" + dataAtualizacao + "]";
 	}
 }
