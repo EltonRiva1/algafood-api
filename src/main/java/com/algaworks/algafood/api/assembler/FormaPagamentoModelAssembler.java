@@ -12,18 +12,17 @@ import com.algaworks.algafood.domain.model.FormaPagamento;
 
 @Component
 public class FormaPagamentoModelAssembler {
-    private final ModelMapper mapper;
+	private final ModelMapper mapper;
 
-    public FormaPagamentoModelAssembler(ModelMapper mapper) {
-        this.mapper = mapper;
-    }
+	public FormaPagamentoModelAssembler(ModelMapper mapper) {
+		this.mapper = mapper;
+	}
 
-    public FormaPagamentoModel toModel(FormaPagamento formaPagamento) {
-        return this.mapper.map(formaPagamento, FormaPagamentoModel.class);
-    }
+	public FormaPagamentoModel toModel(FormaPagamento formaPagamento) {
+		return this.mapper.map(formaPagamento, FormaPagamentoModel.class);
+	}
 
-    public List<?> toCollectionModel(Collection<FormaPagamento> formaPagamentos) {
-        return formaPagamentos.stream().map(this::toModel)
-                .collect(Collectors.toList());
-    }
+	public List<?> toCollectionModel(Collection<FormaPagamento> formaPagamentos) {
+		return formaPagamentos.stream().map(this::toModel).collect(Collectors.toList());
+	}
 }
