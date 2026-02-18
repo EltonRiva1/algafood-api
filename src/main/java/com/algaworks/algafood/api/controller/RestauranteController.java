@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.assembler.RestauranteInputDisassembler;
@@ -26,6 +27,10 @@ import com.algaworks.algafood.api.model.view.RestauranteView;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
 import com.fasterxml.jackson.annotation.JsonView;
+
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @RestController
 @RequestMapping(value = "/restaurantes")
@@ -46,7 +51,9 @@ public class RestauranteController {
 
 	@GetMapping
 	@JsonView(RestauranteView.Resumo.class)
-	public ResponseEntity<List<?>> listar() {
+	public ResponseEntity<List<?>> listar(
+			@Parameter(in = ParameterIn.QUERY, name = "projecao", description = "Nome da projeção de pedidos", schema = @Schema(allowableValues = {
+					"apenas-nome" })) @RequestParam(required = false) String projecao) {
 		return ResponseEntity.ok(this.restauranteModelAssembler
 				.toCollectionModel(this.restauranteRepository.findAllFetchingEnderecoCidade()));
 	}
@@ -128,6 +135,6 @@ public class RestauranteController {
 	@GetMapping(params = "projecao=apenas-nome")
 	@JsonView(RestauranteView.ApenasNome.class)
 	public ResponseEntity<List<?>> listarApenasNome() {
-		return this.listar();
+		return this.listar("apenas-nome");
 	}
 }

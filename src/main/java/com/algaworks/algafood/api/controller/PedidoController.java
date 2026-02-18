@@ -54,8 +54,7 @@ public class PedidoController {
 		pageable = this.traduzirPageable(pageable);
 		var pedidosPage = this.pedidoRepository.findAll(PedidoSpecs.usandoFiltro(pedidoFilter), pageable);
 		var pedidosResumoModel = this.pedidoResumoModelAssembler.toCollectionModel(pedidosPage.getContent());
-		var pedidosResumoModelPage = new PageImpl<>(pedidosResumoModel, pageable, pedidosPage.getTotalElements());
-		return ResponseEntity.ok(pedidosResumoModelPage);
+		return ResponseEntity.ok(new PageImpl<>(pedidosResumoModel, pageable, pedidosPage.getTotalElements()));
 	}
 
 	@GetMapping("/{codigoPedido}")
@@ -78,9 +77,9 @@ public class PedidoController {
 	}
 
 	private Pageable traduzirPageable(Pageable pageable) {
-		var mapeamento = Map.of("codigo", "codigo", "subtotal", "subtotal", "taxaFrete", "taxaFrete",
-				"restaurante.nome", "restaurante.nome", "cliente.nome", "cliente.nome", "valorTotal", "valorTotal",
-				"dataCriacao", "dataCriacao", "restaurante.id", "restaurante.id", "cliente.id", "cliente.id");
-		return PageableTranslator.translate(pageable, mapeamento);
+		return PageableTranslator.translate(pageable,
+				Map.of("codigo", "codigo", "subtotal", "subtotal", "taxaFrete", "taxaFrete", "restaurante.nome",
+						"restaurante.nome", "cliente.nome", "cliente.nome", "valorTotal", "valorTotal", "dataCriacao",
+						"dataCriacao", "restaurante.id", "restaurante.id", "cliente.id", "cliente.id"));
 	}
 }
