@@ -4,7 +4,11 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-public class PedidoModel {
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
+@Relation(collectionRelation = "pedidos")
+public class PedidoModel extends RepresentationModel<PedidoModel> {
 	private String codigo;
 	private BigDecimal subtotal, taxaFrete, valorTotal;
 	private String status;

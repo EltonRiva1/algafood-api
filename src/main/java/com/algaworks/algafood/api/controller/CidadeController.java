@@ -1,6 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.algaworks.algafood.api.ResourceUriHelper;
 import com.algaworks.algafood.api.assembler.CidadeInputDisassembler;
 import com.algaworks.algafood.api.assembler.CidadeModelAssembler;
 import com.algaworks.algafood.api.model.input.CidadeInput;
@@ -37,7 +37,7 @@ public class CidadeController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<?>> listar() {
+	public ResponseEntity<CollectionModel<?>> listar() {
 		return ResponseEntity.ok(this.cidadeModelAssembler.toCollectionModel(this.cidadeRepository.findAll()));
 	}
 
@@ -49,8 +49,10 @@ public class CidadeController {
 
 	@PostMapping
 	public ResponseEntity<?> adicionar(@RequestBody @Valid CidadeInput cidadeInput) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(this.cidadeModelAssembler
-				.toModel(this.cadastroCidadeService.salvar(this.cidadeInputDisassembler.toDomainObject(cidadeInput))));
+		var cidadeModel = this.cidadeModelAssembler
+				.toModel(this.cadastroCidadeService.salvar(this.cidadeInputDisassembler.toDomainObject(cidadeInput)));
+		ResourceUriHelper.addUriInResponseHeader(cidadeModel.getId());
+		return ResponseEntity.status(HttpStatus.CREATED).body(cidadeModel);
 	}
 
 	@PutMapping("/{cidadeId}")

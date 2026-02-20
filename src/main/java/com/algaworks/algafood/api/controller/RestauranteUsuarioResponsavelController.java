@@ -1,7 +1,7 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,9 +26,14 @@ public class RestauranteUsuarioResponsavelController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<?>> listar(@PathVariable Long restauranteId) {
-		return ResponseEntity.ok(this.usuarioModelAssembler.toCollectionModel(
-				this.cadastroRestauranteService.buscarOuFalharComResponsaveis(restauranteId).getResponsaveis()));
+	public ResponseEntity<CollectionModel<?>> listar(@PathVariable Long restauranteId) {
+		return ResponseEntity.ok(this.usuarioModelAssembler
+				.toCollectionModel(
+						this.cadastroRestauranteService.buscarOuFalharComResponsaveis(restauranteId).getResponsaveis())
+				.removeLinks()
+				.add(WebMvcLinkBuilder.linkTo(
+						WebMvcLinkBuilder.methodOn(RestauranteUsuarioResponsavelController.class).listar(restauranteId))
+						.withSelfRel()));
 	}
 
 	@DeleteMapping("/{usuarioId}")

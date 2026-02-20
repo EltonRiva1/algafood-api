@@ -3,15 +3,16 @@ package com.algaworks.algafood.api.controller;
 import com.algaworks.algafood.api.assembler.CozinhaInputDisassembler;
 import com.algaworks.algafood.api.assembler.CozinhaModelAssembler;
 import com.algaworks.algafood.api.model.input.CozinhaInput;
+import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
 
 import jakarta.validation.Valid;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,20 +31,22 @@ public class CozinhaController {
 	private final CadastroCozinhaService cadastroCozinhaService;
 	private final CozinhaModelAssembler cozinhaModelAssembler;
 	private final CozinhaInputDisassembler cozinhaInputDisassembler;
+	private final PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
 
 	public CozinhaController(CozinhaRepository cozinhaRepository, CadastroCozinhaService cadastroCozinhaService,
-			CozinhaModelAssembler cozinhaModelAssembler, CozinhaInputDisassembler cozinhaInputDisassembler) {
+			CozinhaModelAssembler cozinhaModelAssembler, CozinhaInputDisassembler cozinhaInputDisassembler,
+			PagedResourcesAssembler<Cozinha> pagedResourcesAssembler) {
 		this.cozinhaRepository = cozinhaRepository;
 		this.cadastroCozinhaService = cadastroCozinhaService;
 		this.cozinhaModelAssembler = cozinhaModelAssembler;
 		this.cozinhaInputDisassembler = cozinhaInputDisassembler;
+		this.pagedResourcesAssembler = pagedResourcesAssembler;
 	}
 
 	@GetMapping
-	public ResponseEntity<Page<?>> listar(@PageableDefault() Pageable pageable) {
-		return ResponseEntity.ok(new PageImpl<>(
-				this.cozinhaModelAssembler.toCollectionModel(this.cozinhaRepository.findAll(pageable).getContent()),
-				pageable, this.cozinhaRepository.findAll(pageable).getTotalElements()));
+	public ResponseEntity<PagedModel<?>> listar(@PageableDefault() Pageable pageable) {
+		return ResponseEntity.ok(this.pagedResourcesAssembler.toModel(this.cozinhaRepository.findAll(pageable),
+				this.cozinhaModelAssembler));
 	}
 
 	@GetMapping("/{cozinhaId}")

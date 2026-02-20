@@ -1,27 +1,41 @@
 package com.algaworks.algafood.api.assembler;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
+import com.algaworks.algafood.api.controller.CidadeController;
+import com.algaworks.algafood.api.controller.EstadoController;
 import com.algaworks.algafood.api.model.CidadeModel;
 import com.algaworks.algafood.domain.model.Cidade;
 
 @Component
-public class CidadeModelAssembler {
-	private final ModelMapper mapper;
+public class CidadeModelAssembler extends RepresentationModelAssemblerSupport<Cidade, CidadeModel> {
+	@Autowired
+	private ModelMapper mapper;
 
-	public CidadeModelAssembler(ModelMapper mapper) {
-		this.mapper = mapper;
+	public CidadeModelAssembler() {
+		super(CidadeController.class, CidadeModel.class);
 	}
 
+	@Override
 	public CidadeModel toModel(Cidade cidade) {
-		return this.mapper.map(cidade, CidadeModel.class);
+		var cidadeModel = this.createModelWithId(cidade.getId(), cidade);
+		this.mapper.map(cidade, cidadeModel);
+		cidadeModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class).listar())
+				.withRel("cidades"));
+		cidadeModel.getEstado()
+				.add(WebMvcLinkBuilder.linkTo(
+						WebMvcLinkBuilder.methodOn(EstadoController.class).buscar(cidadeModel.getEstado().getId()))
+						.withSelfRel());
+		return cidadeModel;
 	}
 
-	public List<?> toCollectionModel(List<Cidade> cidades) {
-		return cidades.stream().map(this::toModel).collect(Collectors.toList());
+	@Override
+	public CollectionModel<CidadeModel> toCollectionModel(Iterable<? extends Cidade> entities) {
+		return super.toCollectionModel(entities).add(WebMvcLinkBuilder.linkTo(CidadeController.class).withSelfRel());
 	}
 }

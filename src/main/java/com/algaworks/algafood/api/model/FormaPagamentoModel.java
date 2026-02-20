@@ -1,6 +1,10 @@
 package com.algaworks.algafood.api.model;
 
-public class FormaPagamentoModel {
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
+@Relation(collectionRelation = "formasPagamento")
+public class FormaPagamentoModel extends RepresentationModel<FormaPagamentoModel> {
 	private Long id;
 	private String descricao;
 

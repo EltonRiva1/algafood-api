@@ -2,10 +2,10 @@ package com.algaworks.algafood.api.controller;
 
 import java.util.Map;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,10 +19,12 @@ import com.algaworks.algafood.api.assembler.PedidoInputDisassembler;
 import com.algaworks.algafood.api.assembler.PedidoModelAssembler;
 import com.algaworks.algafood.api.assembler.PedidoResumoModelAssembler;
 import com.algaworks.algafood.api.model.input.PedidoInput;
+import com.algaworks.algafood.core.data.PageWrapper;
 import com.algaworks.algafood.core.data.PageableTranslator;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.filter.PedidoFilter;
+import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.repository.PedidoRepository;
 import com.algaworks.algafood.domain.service.EmissaoPedidoService;
@@ -38,23 +40,25 @@ public class PedidoController {
 	private final PedidoModelAssembler pedidoModelAssembler;
 	private final PedidoResumoModelAssembler pedidoResumoModelAssembler;
 	private final PedidoInputDisassembler pedidoInputDisassembler;
+	private final PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 
 	public PedidoController(PedidoRepository pedidoRepository, EmissaoPedidoService emissaoPedidoService,
 			PedidoModelAssembler pedidoModelAssembler, PedidoResumoModelAssembler pedidoResumoModelAssembler,
-			PedidoInputDisassembler pedidoInputDisassembler) {
+			PedidoInputDisassembler pedidoInputDisassembler, PagedResourcesAssembler<Pedido> pagedResourcesAssembler) {
 		this.pedidoRepository = pedidoRepository;
 		this.emissaoPedidoService = emissaoPedidoService;
 		this.pedidoModelAssembler = pedidoModelAssembler;
 		this.pedidoResumoModelAssembler = pedidoResumoModelAssembler;
 		this.pedidoInputDisassembler = pedidoInputDisassembler;
+		this.pagedResourcesAssembler = pagedResourcesAssembler;
 	}
 
 	@GetMapping
-	public ResponseEntity<Page<?>> pesquisar(PedidoFilter pedidoFilter, @PageableDefault() Pageable pageable) {
-		pageable = this.traduzirPageable(pageable);
-		var pedidosPage = this.pedidoRepository.findAll(PedidoSpecs.usandoFiltro(pedidoFilter), pageable);
-		var pedidosResumoModel = this.pedidoResumoModelAssembler.toCollectionModel(pedidosPage.getContent());
-		return ResponseEntity.ok(new PageImpl<>(pedidosResumoModel, pageable, pedidosPage.getTotalElements()));
+	public ResponseEntity<PagedModel<?>> pesquisar(PedidoFilter pedidoFilter, @PageableDefault() Pageable pageable) {
+		var pedidosPage = this.pedidoRepository.findAll(PedidoSpecs.usandoFiltro(pedidoFilter),
+				this.traduzirPageable(pageable));
+		pedidosPage = new PageWrapper<>(pedidosPage, pageable);
+		return ResponseEntity.ok(this.pagedResourcesAssembler.toModel(pedidosPage, this.pedidoResumoModelAssembler));
 	}
 
 	@GetMapping("/{codigoPedido}")

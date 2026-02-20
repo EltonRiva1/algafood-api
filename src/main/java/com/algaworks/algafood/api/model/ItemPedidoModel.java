@@ -2,7 +2,9 @@ package com.algaworks.algafood.api.model;
 
 import java.math.BigDecimal;
 
-public class ItemPedidoModel {
+import org.springframework.hateoas.RepresentationModel;
+
+public class ItemPedidoModel extends RepresentationModel<ItemPedidoModel> {
 	private Long produtoId;
 	private String produtoNome, observacao;
 	private Integer quantidade;

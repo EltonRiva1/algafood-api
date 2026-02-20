@@ -1,6 +1,10 @@
 package com.algaworks.algafood.api.model;
 
-public class UsuarioModel {
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
+@Relation(collectionRelation = "usuarios")
+public class UsuarioModel extends RepresentationModel<UsuarioModel> {
 	private Long id;
 	private String nome, email;
 

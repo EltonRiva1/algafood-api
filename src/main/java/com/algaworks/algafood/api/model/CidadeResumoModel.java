@@ -1,6 +1,10 @@
 package com.algaworks.algafood.api.model;
 
-public class CidadeResumoModel {
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
+@Relation(collectionRelation = "cidades")
+public class CidadeResumoModel extends RepresentationModel<CidadeResumoModel> {
 	private Long id;
 	private String nome;
 	private String estado;
