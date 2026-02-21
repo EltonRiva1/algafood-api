@@ -1,7 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.AlgaLinks;
 import com.algaworks.algafood.api.assembler.UsuarioModelAssembler;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
 
@@ -18,11 +18,13 @@ import com.algaworks.algafood.domain.service.CadastroRestauranteService;
 public class RestauranteUsuarioResponsavelController {
 	private final CadastroRestauranteService cadastroRestauranteService;
 	private final UsuarioModelAssembler usuarioModelAssembler;
+	private final AlgaLinks algaLinks;
 
 	public RestauranteUsuarioResponsavelController(CadastroRestauranteService cadastroRestauranteService,
-			UsuarioModelAssembler usuarioModelAssembler) {
+			UsuarioModelAssembler usuarioModelAssembler, AlgaLinks algaLinks) {
 		this.cadastroRestauranteService = cadastroRestauranteService;
 		this.usuarioModelAssembler = usuarioModelAssembler;
+		this.algaLinks = algaLinks;
 	}
 
 	@GetMapping
@@ -30,10 +32,7 @@ public class RestauranteUsuarioResponsavelController {
 		return ResponseEntity.ok(this.usuarioModelAssembler
 				.toCollectionModel(
 						this.cadastroRestauranteService.buscarOuFalharComResponsaveis(restauranteId).getResponsaveis())
-				.removeLinks()
-				.add(WebMvcLinkBuilder.linkTo(
-						WebMvcLinkBuilder.methodOn(RestauranteUsuarioResponsavelController.class).listar(restauranteId))
-						.withSelfRel()));
+				.removeLinks().add(this.algaLinks.linkToResponsaveisRestaurante(restauranteId)));
 	}
 
 	@DeleteMapping("/{usuarioId}")
