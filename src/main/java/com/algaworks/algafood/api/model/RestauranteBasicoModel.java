@@ -6,13 +6,11 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 @Relation(collectionRelation = "restaurantes")
-public class RestauranteModel extends RepresentationModel<RestauranteModel> {
+public class RestauranteBasicoModel extends RepresentationModel<RestauranteBasicoModel> {
 	private Long id;
 	private String nome;
 	private BigDecimal taxaFrete;
 	private CozinhaModel cozinha;
-	private Boolean ativo, aberto;
-	private EnderecoModel endereco;
 
 	public Long getId() {
 		return id;
@@ -44,29 +42,5 @@ public class RestauranteModel extends RepresentationModel<RestauranteModel> {
 
 	public void setCozinha(CozinhaModel cozinha) {
 		this.cozinha = cozinha;
-	}
-
-	public Boolean getAtivo() {
-		return ativo;
-	}
-
-	public void setAtivo(Boolean ativo) {
-		this.ativo = ativo;
-	}
-
-	public Boolean getAberto() {
-		return aberto;
-	}
-
-	public void setAberto(Boolean aberto) {
-		this.aberto = aberto;
-	}
-
-	public EnderecoModel getEndereco() {
-		return endereco;
-	}
-
-	public void setEndereco(EnderecoModel endereco) {
-		this.endereco = endereco;
 	}
 }

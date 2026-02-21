@@ -16,6 +16,7 @@ import com.algaworks.algafood.api.controller.FluxoPedidoController;
 import com.algaworks.algafood.api.controller.FormaPagamentoController;
 import com.algaworks.algafood.api.controller.PedidoController;
 import com.algaworks.algafood.api.controller.RestauranteController;
+import com.algaworks.algafood.api.controller.RestauranteFormaPagamentoController;
 import com.algaworks.algafood.api.controller.RestauranteProdutoController;
 import com.algaworks.algafood.api.controller.RestauranteUsuarioResponsavelController;
 import com.algaworks.algafood.api.controller.UsuarioController;
@@ -61,6 +62,20 @@ public class AlgaLinks {
 		return this.linkToRestaurante(restauranteId, IanaLinkRelations.SELF_VALUE);
 	}
 
+	public Link linkToRestaurantes(String rel) {
+		return WebMvcLinkBuilder.linkTo(RestauranteController.class).withRel(rel);
+	}
+
+	public Link linkToRestaurantes() {
+		return this.linkToRestaurantes(IanaLinkRelations.SELF.value());
+	}
+
+	public Link linkToRestauranteFormasPagamento(Long restauranteId, String rel) {
+		return WebMvcLinkBuilder
+				.linkTo(WebMvcLinkBuilder.methodOn(RestauranteFormaPagamentoController.class).listar(restauranteId))
+				.withRel(rel);
+	}
+
 	public Link linkToUsuario(Long usuarioId, String rel) {
 		return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UsuarioController.class).buscar(usuarioId))
 				.withRel(rel);
@@ -85,6 +100,12 @@ public class AlgaLinks {
 
 	public Link linkToGruposUsuario(Long usuarioId) {
 		return this.linkToGruposUsuario(usuarioId, IanaLinkRelations.SELF_VALUE);
+	}
+
+	public Link linkToRestauranteResponsaveis(Long restauranteId, String rel) {
+		return WebMvcLinkBuilder
+				.linkTo(WebMvcLinkBuilder.methodOn(RestauranteUsuarioResponsavelController.class).listar(restauranteId))
+				.withRel(rel);
 	}
 
 	public Link linkToResponsaveisRestaurante(Long restauranteId, String rel) {
@@ -157,5 +178,14 @@ public class AlgaLinks {
 
 	public Link linkToCozinhas() {
 		return this.linkToCozinhas(IanaLinkRelations.SELF.value());
+	}
+
+	public Link linkToCozinha(Long cozinhaId, String rel) {
+		return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CozinhaController.class).buscar(cozinhaId))
+				.withRel(rel);
+	}
+
+	public Link linkToCozinha(Long cozinhaId) {
+		return this.linkToCozinha(cozinhaId, IanaLinkRelations.SELF.value());
 	}
 }

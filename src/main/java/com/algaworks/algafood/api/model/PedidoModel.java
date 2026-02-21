@@ -13,7 +13,7 @@ public class PedidoModel extends RepresentationModel<PedidoModel> {
 	private BigDecimal subtotal, taxaFrete, valorTotal;
 	private String status;
 	private OffsetDateTime dataCriacao, dataConfirmacao, dataCancelamento, dataEntrega;
-	private RestauranteResumoModel restaurante;
+	private RestauranteApenasNomeModel restaurante;
 	private UsuarioModel cliente;
 	private FormaPagamentoModel formaPagamento;
 	private EnderecoModel enderecoEntrega;
@@ -91,11 +91,11 @@ public class PedidoModel extends RepresentationModel<PedidoModel> {
 		this.dataEntrega = dataEntrega;
 	}
 
-	public RestauranteResumoModel getRestaurante() {
+	public RestauranteApenasNomeModel getRestaurante() {
 		return restaurante;
 	}
 
-	public void setRestaurante(RestauranteResumoModel restaurante) {
+	public void setRestaurante(RestauranteApenasNomeModel restaurante) {
 		this.restaurante = restaurante;
 	}
 

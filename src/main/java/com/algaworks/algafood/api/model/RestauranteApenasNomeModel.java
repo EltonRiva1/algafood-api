@@ -4,7 +4,7 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 @Relation(collectionRelation = "restaurantes")
-public class RestauranteResumoModel extends RepresentationModel<RestauranteResumoModel> {
+public class RestauranteApenasNomeModel extends RepresentationModel<RestauranteApenasNomeModel> {
 	private Long id;
 	private String nome;
 

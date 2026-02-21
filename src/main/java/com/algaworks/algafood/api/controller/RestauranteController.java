@@ -8,6 +8,7 @@ import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
 import jakarta.validation.Valid;
 
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,14 +21,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.assembler.RestauranteApenasNomeModelAssembler;
+import com.algaworks.algafood.api.assembler.RestauranteBasicoModelAssembler;
 import com.algaworks.algafood.api.assembler.RestauranteInputDisassembler;
 import com.algaworks.algafood.api.assembler.RestauranteModelAssembler;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
-import com.algaworks.algafood.api.model.view.RestauranteView;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
-import com.fasterxml.jackson.annotation.JsonView;
-
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -39,22 +39,27 @@ public class RestauranteController {
 	private final CadastroRestauranteService cadastroRestauranteService;
 	private final RestauranteModelAssembler restauranteModelAssembler;
 	private final RestauranteInputDisassembler restauranteInputDisassembler;
+	private final RestauranteBasicoModelAssembler restauranteBasicoModelAssembler;
+	private final RestauranteApenasNomeModelAssembler restauranteApenasNomeModelAssembler;
 
 	public RestauranteController(RestauranteRepository restauranteRepository,
 			CadastroRestauranteService cadastroRestauranteService, RestauranteModelAssembler restauranteModelAssembler,
-			RestauranteInputDisassembler restauranteInputDisassembler) {
+			RestauranteInputDisassembler restauranteInputDisassembler,
+			RestauranteBasicoModelAssembler restauranteBasicoModelAssembler,
+			RestauranteApenasNomeModelAssembler restauranteApenasNomeModelAssembler) {
 		this.restauranteRepository = restauranteRepository;
 		this.cadastroRestauranteService = cadastroRestauranteService;
 		this.restauranteModelAssembler = restauranteModelAssembler;
 		this.restauranteInputDisassembler = restauranteInputDisassembler;
+		this.restauranteBasicoModelAssembler = restauranteBasicoModelAssembler;
+		this.restauranteApenasNomeModelAssembler = restauranteApenasNomeModelAssembler;
 	}
 
 	@GetMapping
-	@JsonView(RestauranteView.Resumo.class)
-	public ResponseEntity<List<?>> listar(
+	public ResponseEntity<CollectionModel<?>> listar(
 			@Parameter(in = ParameterIn.QUERY, name = "projecao", description = "Nome da projeção de pedidos", schema = @Schema(allowableValues = {
 					"apenas-nome" })) @RequestParam(required = false) String projecao) {
-		return ResponseEntity.ok(this.restauranteModelAssembler
+		return ResponseEntity.ok(this.restauranteBasicoModelAssembler
 				.toCollectionModel(this.restauranteRepository.findAllFetchingEnderecoCidade()));
 	}
 
@@ -133,8 +138,8 @@ public class RestauranteController {
 	}
 
 	@GetMapping(params = "projecao=apenas-nome")
-	@JsonView(RestauranteView.ApenasNome.class)
-	public ResponseEntity<List<?>> listarApenasNome() {
-		return this.listar("apenas-nome");
+	public ResponseEntity<CollectionModel<?>> listarApenasNome() {
+		return ResponseEntity.ok(this.restauranteApenasNomeModelAssembler
+				.toCollectionModel(this.restauranteRepository.findAllFetchingEnderecoCidade()));
 	}
 }
