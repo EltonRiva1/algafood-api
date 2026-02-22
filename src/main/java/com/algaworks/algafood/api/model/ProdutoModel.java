@@ -2,7 +2,11 @@ package com.algaworks.algafood.api.model;
 
 import java.math.BigDecimal;
 
-public class ProdutoModel {
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
+@Relation(collectionRelation = "produtos")
+public class ProdutoModel extends RepresentationModel<ProdutoModel> {
 	private Long id;
 	private String nome, descricao;
 	private BigDecimal preco;

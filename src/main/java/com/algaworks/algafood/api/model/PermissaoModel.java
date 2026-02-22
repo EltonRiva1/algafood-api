@@ -1,6 +1,10 @@
 package com.algaworks.algafood.api.model;
 
-public class PermissaoModel {
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
+@Relation(collectionRelation = "permissoes")
+public class PermissaoModel extends RepresentationModel<PermissaoModel> {
 	private Long id;
 	private String nome, descricao;
 

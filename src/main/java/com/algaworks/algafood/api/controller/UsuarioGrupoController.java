@@ -1,7 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.AlgaLinks;
 import com.algaworks.algafood.api.assembler.GrupoModelAssembler;
 import com.algaworks.algafood.domain.service.CadastroUsuarioService;
 
@@ -18,17 +18,25 @@ import com.algaworks.algafood.domain.service.CadastroUsuarioService;
 public class UsuarioGrupoController {
 	private final CadastroUsuarioService cadastroUsuarioService;
 	private final GrupoModelAssembler grupoModelAssembler;
+	private final AlgaLinks algaLinks;
 
 	public UsuarioGrupoController(CadastroUsuarioService cadastroUsuarioService,
-			GrupoModelAssembler grupoModelAssembler) {
+			GrupoModelAssembler grupoModelAssembler, AlgaLinks algaLinks) {
 		this.cadastroUsuarioService = cadastroUsuarioService;
 		this.grupoModelAssembler = grupoModelAssembler;
+		this.algaLinks = algaLinks;
 	}
 
 	@GetMapping
-	public ResponseEntity<List<?>> listar(@PathVariable Long usuarioId) {
-		return ResponseEntity.ok(this.grupoModelAssembler
-				.toCollectionModel(this.cadastroUsuarioService.buscarComGruposOuFalhar(usuarioId).getGrupos()));
+	public ResponseEntity<CollectionModel<?>> listar(@PathVariable Long usuarioId) {
+		var gruposModel = this.grupoModelAssembler
+				.toCollectionModel(this.cadastroUsuarioService.buscarOuFalhar(usuarioId).getGrupos()).removeLinks()
+				.add(this.algaLinks.linkToUsuarioGrupoAssociacao(usuarioId, "associar"));
+		gruposModel.getContent().forEach(grupoModel -> {
+			grupoModel
+					.add(this.algaLinks.linkToUsuarioGrupoDesassociacao(usuarioId, grupoModel.getId(), "desassociar"));
+		});
+		return ResponseEntity.ok(gruposModel);
 	}
 
 	@DeleteMapping("/{grupoId}")

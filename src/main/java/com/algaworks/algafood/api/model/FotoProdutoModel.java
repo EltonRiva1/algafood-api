@@ -1,6 +1,10 @@
 package com.algaworks.algafood.api.model;
 
-public class FotoProdutoModel {
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
+@Relation(collectionRelation = "fotos")
+public class FotoProdutoModel extends RepresentationModel<FotoProdutoModel> {
 	private String nomeArquivo, descricao, contentType;
 	private Long tamanho;
 

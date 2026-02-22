@@ -1,7 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.AlgaLinks;
 import com.algaworks.algafood.api.assembler.ProdutoInputDisassembler;
 import com.algaworks.algafood.api.assembler.ProdutoModelAssembler;
 import com.algaworks.algafood.api.model.input.ProdutoInput;
@@ -30,25 +30,28 @@ public class RestauranteProdutoController {
 	private final CadastroRestauranteService cadastroRestauranteService;
 	private final ProdutoModelAssembler produtoModelAssembler;
 	private final ProdutoInputDisassembler produtoInputDisassembler;
+	private final AlgaLinks algaLinks;
 
 	public RestauranteProdutoController(ProdutoRepository produtoRepository,
 			CadastroProdutoService cadastroProdutoService, CadastroRestauranteService cadastroRestauranteService,
-			ProdutoModelAssembler produtoModelAssembler, ProdutoInputDisassembler produtoInputDisassembler) {
+			ProdutoModelAssembler produtoModelAssembler, ProdutoInputDisassembler produtoInputDisassembler,
+			AlgaLinks algaLinks) {
 		this.produtoRepository = produtoRepository;
 		this.cadastroProdutoService = cadastroProdutoService;
 		this.cadastroRestauranteService = cadastroRestauranteService;
 		this.produtoModelAssembler = produtoModelAssembler;
 		this.produtoInputDisassembler = produtoInputDisassembler;
+		this.algaLinks = algaLinks;
 	}
 
 	@GetMapping
-	public ResponseEntity<List<?>> listar(@PathVariable Long restauranteId,
-			@RequestParam(required = false, defaultValue = "false") boolean incluirInativos) {
-		return ResponseEntity.ok(this.produtoModelAssembler.toCollectionModel(incluirInativos
-				? this.produtoRepository
-						.findTodosByRestaurante(this.cadastroRestauranteService.buscarOuFalhar(restauranteId))
-				: this.produtoRepository
-						.findAtivosByRestaurante(this.cadastroRestauranteService.buscarOuFalhar(restauranteId))));
+	public ResponseEntity<CollectionModel<?>> listar(@PathVariable Long restauranteId,
+			@RequestParam(required = false, defaultValue = "false") Boolean incluirInativos) {
+		var restaurante = this.cadastroRestauranteService.buscarOuFalhar(restauranteId);
+		return ResponseEntity.ok(this.produtoModelAssembler
+				.toCollectionModel(incluirInativos ? this.produtoRepository.findTodosByRestaurante(restaurante)
+						: this.produtoRepository.findAtivosByRestaurante(restaurante))
+				.add(this.algaLinks.linkToProdutos(restauranteId)));
 	}
 
 	@GetMapping("/{produtoId}")

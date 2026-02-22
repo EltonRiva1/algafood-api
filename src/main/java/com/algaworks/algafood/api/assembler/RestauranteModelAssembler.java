@@ -15,7 +15,6 @@ import com.algaworks.algafood.domain.model.Restaurante;
 public class RestauranteModelAssembler extends RepresentationModelAssemblerSupport<Restaurante, RestauranteModel> {
 	@Autowired
 	private ModelMapper modelMapper;
-
 	@Autowired
 	private AlgaLinks algaLinks;
 
@@ -36,9 +35,11 @@ public class RestauranteModelAssembler extends RepresentationModelAssemblerSuppo
 			restauranteModel.add(this.algaLinks.linkToRestauranteAbertura(restaurante.getId(), "abrir"));
 		if (restaurante.fechamentoPermitido())
 			restauranteModel.add(this.algaLinks.linkToRestauranteFechamento(restaurante.getId(), "fechar"));
+		restauranteModel.add(this.algaLinks.linkToProdutos(restaurante.getId(), "produtos"));
 		restauranteModel.getCozinha().add(this.algaLinks.linkToCozinha(restaurante.getCozinha().getId()));
-		restauranteModel.getEndereco().getCidade()
-				.add(this.algaLinks.linkToCidade(restaurante.getEndereco().getCidade().getId()));
+		if (restauranteModel.getEndereco() != null && restauranteModel.getEndereco().getCidade() != null)
+			restauranteModel.getEndereco().getCidade()
+					.add(this.algaLinks.linkToCidade(restaurante.getEndereco().getCidade().getId()));
 		restauranteModel.add(this.algaLinks.linkToRestauranteFormasPagamento(restaurante.getId(), "formas-pagamento"));
 		restauranteModel.add(this.algaLinks.linkToRestauranteResponsaveis(restaurante.getId(), "responsaveis"));
 		return restauranteModel;

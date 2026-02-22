@@ -12,12 +12,17 @@ import org.springframework.stereotype.Component;
 import com.algaworks.algafood.api.controller.CidadeController;
 import com.algaworks.algafood.api.controller.CozinhaController;
 import com.algaworks.algafood.api.controller.EstadoController;
+import com.algaworks.algafood.api.controller.EstatisticasController;
 import com.algaworks.algafood.api.controller.FluxoPedidoController;
 import com.algaworks.algafood.api.controller.FormaPagamentoController;
+import com.algaworks.algafood.api.controller.GrupoController;
+import com.algaworks.algafood.api.controller.GrupoPermissaoController;
 import com.algaworks.algafood.api.controller.PedidoController;
+import com.algaworks.algafood.api.controller.PermissaoController;
 import com.algaworks.algafood.api.controller.RestauranteController;
 import com.algaworks.algafood.api.controller.RestauranteFormaPagamentoController;
 import com.algaworks.algafood.api.controller.RestauranteProdutoController;
+import com.algaworks.algafood.api.controller.RestauranteProdutoFotoController;
 import com.algaworks.algafood.api.controller.RestauranteUsuarioResponsavelController;
 import com.algaworks.algafood.api.controller.UsuarioController;
 import com.algaworks.algafood.api.controller.UsuarioGrupoController;
@@ -130,6 +135,18 @@ public class AlgaLinks {
 		return this.linkToUsuarios(IanaLinkRelations.SELF_VALUE);
 	}
 
+	public Link linkToUsuarioGrupoAssociacao(Long usuarioId, String rel) {
+		return WebMvcLinkBuilder
+				.linkTo(WebMvcLinkBuilder.methodOn(UsuarioGrupoController.class).associar(usuarioId, null))
+				.withRel(rel);
+	}
+
+	public Link linkToUsuarioGrupoDesassociacao(Long usuarioId, Long grupoId, String rel) {
+		return WebMvcLinkBuilder
+				.linkTo(WebMvcLinkBuilder.methodOn(UsuarioGrupoController.class).desassociar(usuarioId, grupoId))
+				.withRel(rel);
+	}
+
 	public Link linkToGruposUsuario(Long usuarioId, String rel) {
 		return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UsuarioGrupoController.class).listar(usuarioId))
 				.withRel(rel);
@@ -137,6 +154,43 @@ public class AlgaLinks {
 
 	public Link linkToGruposUsuario(Long usuarioId) {
 		return this.linkToGruposUsuario(usuarioId, IanaLinkRelations.SELF_VALUE);
+	}
+
+	public Link linkToGrupos(String rel) {
+		return WebMvcLinkBuilder.linkTo(GrupoController.class).withRel(rel);
+	}
+
+	public Link linkToGrupos() {
+		return this.linkToGrupos(IanaLinkRelations.SELF.value());
+	}
+
+	public Link linkToPermissoes(String rel) {
+		return WebMvcLinkBuilder.linkTo(PermissaoController.class).withRel(rel);
+	}
+
+	public Link linkToPermissoes() {
+		return this.linkToPermissoes(IanaLinkRelations.SELF.value());
+	}
+
+	public Link linkToGrupoPermissoes(Long grupoId, String rel) {
+		return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(GrupoPermissaoController.class).listar(grupoId))
+				.withRel(rel);
+	}
+
+	public Link linkToGrupoPermissoes(Long grupoId) {
+		return this.linkToGrupoPermissoes(grupoId, IanaLinkRelations.SELF.value());
+	}
+
+	public Link linkToGrupoPermissaoAssociacao(Long grupoId, String rel) {
+		return WebMvcLinkBuilder
+				.linkTo(WebMvcLinkBuilder.methodOn(GrupoPermissaoController.class).associar(grupoId, null))
+				.withRel(rel);
+	}
+
+	public Link linkToGrupoPermissaoDesassociacao(Long grupoId, Long permissaoId, String rel) {
+		return WebMvcLinkBuilder
+				.linkTo(WebMvcLinkBuilder.methodOn(GrupoPermissaoController.class).desassociar(grupoId, permissaoId))
+				.withRel(rel);
 	}
 
 	public Link linkToRestauranteResponsaveis(Long restauranteId, String rel) {
@@ -147,6 +201,17 @@ public class AlgaLinks {
 
 	public Link linkToRestauranteResponsaveis(Long restauranteId) {
 		return this.linkToRestauranteResponsaveis(restauranteId, IanaLinkRelations.SELF.value());
+	}
+
+	public Link linkToRestauranteResponsavelDesassociacao(Long restauranteId, Long usuarioId, String rel) {
+		return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RestauranteUsuarioResponsavelController.class)
+				.desassociar(restauranteId, usuarioId)).withRel(rel);
+	}
+
+	public Link linkToRestauranteResponsavelAssociacao(Long restauranteId, String rel) {
+		return WebMvcLinkBuilder.linkTo(
+				WebMvcLinkBuilder.methodOn(RestauranteUsuarioResponsavelController.class).associar(restauranteId, null))
+				.withRel(rel);
 	}
 
 	public Link linkToFormaPagamento(Long formaPagamentoId, String rel) {
@@ -211,6 +276,26 @@ public class AlgaLinks {
 		return this.linkToProduto(restauranteId, produtoId, IanaLinkRelations.SELF.value());
 	}
 
+	public Link linkToProdutos(Long restauranteId, String rel) {
+		return WebMvcLinkBuilder
+				.linkTo(WebMvcLinkBuilder.methodOn(RestauranteProdutoController.class).listar(restauranteId, null))
+				.withRel(rel);
+	}
+
+	public Link linkToProdutos(Long restauranteId) {
+		return this.linkToProdutos(restauranteId, IanaLinkRelations.SELF.value());
+	}
+
+	public Link linkToFotoProduto(Long restauranteId, Long produtoId, String rel) {
+		return WebMvcLinkBuilder.linkTo(
+				WebMvcLinkBuilder.methodOn(RestauranteProdutoFotoController.class).buscar(restauranteId, produtoId))
+				.withRel(rel);
+	}
+
+	public Link linkToFotoProduto(Long restauranteId, Long produtoId) {
+		return this.linkToFotoProduto(restauranteId, produtoId, IanaLinkRelations.SELF.value());
+	}
+
 	public Link linkToCozinhas(String rel) {
 		return WebMvcLinkBuilder.linkTo(CozinhaController.class).withRel(rel);
 	}
@@ -226,5 +311,20 @@ public class AlgaLinks {
 
 	public Link linkToCozinha(Long cozinhaId) {
 		return this.linkToCozinha(cozinhaId, IanaLinkRelations.SELF.value());
+	}
+
+	public Link linkToEstatisticas(String rel) {
+		return WebMvcLinkBuilder.linkTo(EstatisticasController.class).withRel(rel);
+	}
+
+	public Link linkToEstatisticasVendasDiarias(String rel) {
+		return Link.of(UriTemplate.of(WebMvcLinkBuilder
+				.linkTo(WebMvcLinkBuilder.methodOn(EstatisticasController.class).consultarVendasDiarias(null, null))
+				.toUri().toString(),
+				new TemplateVariables(new TemplateVariable("restauranteId", VariableType.REQUEST_PARAM),
+						new TemplateVariable("dataCriacaoInicio", VariableType.REQUEST_PARAM),
+						new TemplateVariable("dataCriacaoFim", VariableType.REQUEST_PARAM),
+						new TemplateVariable("timeOffset", VariableType.REQUEST_PARAM))),
+				rel);
 	}
 }

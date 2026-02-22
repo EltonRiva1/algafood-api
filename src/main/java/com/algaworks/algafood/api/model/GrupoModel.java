@@ -1,6 +1,10 @@
 package com.algaworks.algafood.api.model;
 
-public class GrupoModel {
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
+@Relation(collectionRelation = "grupos")
+public class GrupoModel extends RepresentationModel<GrupoModel> {
 	private Long id;
 	private String nome;
 
