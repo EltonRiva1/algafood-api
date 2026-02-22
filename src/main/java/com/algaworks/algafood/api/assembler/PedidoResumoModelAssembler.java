@@ -25,7 +25,7 @@ public class PedidoResumoModelAssembler extends RepresentationModelAssemblerSupp
 	public PedidoResumoModel toModel(Pedido pedido) {
 		var pedidoModel = this.createModelWithId(pedido.getCodigo(), pedido);
 		this.mapper.map(pedido, pedidoModel);
-		pedidoModel.add(this.algaLinks.linkToPedidos());
+		pedidoModel.add(this.algaLinks.linkToPedidos("pedidos"));
 		pedidoModel.getRestaurante().add(this.algaLinks.linkToRestaurante(pedido.getRestaurante().getId()));
 		pedidoModel.getCliente().add(this.algaLinks.linkToUsuario(pedido.getCliente().getId()));
 		return pedidoModel;

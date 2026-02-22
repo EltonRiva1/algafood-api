@@ -27,15 +27,16 @@ public class AlgaLinks {
 	private static final TemplateVariables PAGINACAO_VARIABLES = new TemplateVariables(
 			new TemplateVariable("page", VariableType.REQUEST_PARAM),
 			new TemplateVariable("size", VariableType.REQUEST_PARAM),
-			new TemplateVariable("sort", VariableType.REQUEST_PARAM));
+			new TemplateVariable("sort", VariableType.REQUEST_PARAM)),
+			PROJECAO_VARIABLES = new TemplateVariables(new TemplateVariable("projecao", VariableType.REQUEST_PARAM));
 
-	public Link linkToPedidos() {
+	public Link linkToPedidos(String rel) {
 		var filtroVariables = new TemplateVariables(new TemplateVariable("clienteId", VariableType.REQUEST_PARAM),
 				new TemplateVariable("restauranteId", VariableType.REQUEST_PARAM),
 				new TemplateVariable("dataCriacaoInicio", VariableType.REQUEST_PARAM),
 				new TemplateVariable("dataCriacaoFim", VariableType.REQUEST_PARAM));
 		return Link.of(UriTemplate.of(WebMvcLinkBuilder.linkTo(PedidoController.class).toUri().toString(),
-				PAGINACAO_VARIABLES.concat(filtroVariables)), "pedidos");
+				PAGINACAO_VARIABLES.concat(filtroVariables)), rel);
 	}
 
 	public Link linkToConfirmacaoPedido(String codigoPedido, String rel) {
@@ -63,7 +64,8 @@ public class AlgaLinks {
 	}
 
 	public Link linkToRestaurantes(String rel) {
-		return WebMvcLinkBuilder.linkTo(RestauranteController.class).withRel(rel);
+		return Link.of(UriTemplate.of(WebMvcLinkBuilder.linkTo(RestauranteController.class).toUri().toString(),
+				PROJECAO_VARIABLES), rel);
 	}
 
 	public Link linkToRestaurantes() {
@@ -73,6 +75,35 @@ public class AlgaLinks {
 	public Link linkToRestauranteFormasPagamento(Long restauranteId, String rel) {
 		return WebMvcLinkBuilder
 				.linkTo(WebMvcLinkBuilder.methodOn(RestauranteFormaPagamentoController.class).listar(restauranteId))
+				.withRel(rel);
+	}
+
+	public Link linkToRestauranteFormasPagamento(Long restauranteId) {
+		return this.linkToRestauranteFormasPagamento(restauranteId, IanaLinkRelations.SELF.value());
+	}
+
+	public Link linkToRestauranteFormaPagamentoDesassociacao(Long restauranteId, Long formaPagamentoId, String rel) {
+		return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RestauranteFormaPagamentoController.class)
+				.desassociar(restauranteId, formaPagamentoId)).withRel(rel);
+	}
+
+	public Link linkToRestauranteAbertura(Long restauranteId, String rel) {
+		return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RestauranteController.class).abrir(restauranteId))
+				.withRel(rel);
+	}
+
+	public Link linkToRestauranteFechamento(Long restauranteId, String rel) {
+		return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RestauranteController.class).fechar(restauranteId))
+				.withRel(rel);
+	}
+
+	public Link linkToRestauranteInativacao(Long restauranteId, String rel) {
+		return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RestauranteController.class).inativar(restauranteId))
+				.withRel(rel);
+	}
+
+	public Link linkToRestauranteAtivacao(Long restauranteId, String rel) {
+		return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RestauranteController.class).ativar(restauranteId))
 				.withRel(rel);
 	}
 
@@ -108,14 +139,8 @@ public class AlgaLinks {
 				.withRel(rel);
 	}
 
-	public Link linkToResponsaveisRestaurante(Long restauranteId, String rel) {
-		return WebMvcLinkBuilder
-				.linkTo(WebMvcLinkBuilder.methodOn(RestauranteUsuarioResponsavelController.class).listar(restauranteId))
-				.withRel(rel);
-	}
-
-	public Link linkToResponsaveisRestaurante(Long restauranteId) {
-		return this.linkToResponsaveisRestaurante(restauranteId, IanaLinkRelations.SELF.value());
+	public Link linkToRestauranteResponsaveis(Long restauranteId) {
+		return this.linkToRestauranteResponsaveis(restauranteId, IanaLinkRelations.SELF.value());
 	}
 
 	public Link linkToFormaPagamento(Long formaPagamentoId, String rel) {
@@ -126,6 +151,14 @@ public class AlgaLinks {
 
 	public Link linkToFormaPagamento(Long formaPagamentoId) {
 		return this.linkToFormaPagamento(formaPagamentoId, IanaLinkRelations.SELF.value());
+	}
+
+	public Link linkToFormasPagamento(String rel) {
+		return WebMvcLinkBuilder.linkTo(FormaPagamentoController.class).withRel(rel);
+	}
+
+	public Link linkToFormasPagamento() {
+		return this.linkToFormasPagamento(IanaLinkRelations.SELF.value());
 	}
 
 	public Link linkToCidade(Long cidadeId, String rel) {

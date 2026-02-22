@@ -25,9 +25,17 @@ public class RestauranteModelAssembler extends RepresentationModelAssemblerSuppo
 
 	@Override
 	public RestauranteModel toModel(Restaurante restaurante) {
-		var restauranteModel = createModelWithId(restaurante.getId(), restaurante);
+		var restauranteModel = this.createModelWithId(restaurante.getId(), restaurante);
 		this.modelMapper.map(restaurante, restauranteModel);
 		restauranteModel.add(this.algaLinks.linkToRestaurantes("restaurantes"));
+		if (restaurante.ativacaoPermitida())
+			restauranteModel.add(this.algaLinks.linkToRestauranteAtivacao(restaurante.getId(), "ativar"));
+		if (restaurante.inativacaoPermitida())
+			restauranteModel.add(this.algaLinks.linkToRestauranteInativacao(restaurante.getId(), "inativar"));
+		if (restaurante.aberturaPermitida())
+			restauranteModel.add(this.algaLinks.linkToRestauranteAbertura(restaurante.getId(), "abrir"));
+		if (restaurante.fechamentoPermitido())
+			restauranteModel.add(this.algaLinks.linkToRestauranteFechamento(restaurante.getId(), "fechar"));
 		restauranteModel.getCozinha().add(this.algaLinks.linkToCozinha(restaurante.getCozinha().getId()));
 		restauranteModel.getEndereco().getCidade()
 				.add(this.algaLinks.linkToCidade(restaurante.getEndereco().getCidade().getId()));

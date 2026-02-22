@@ -25,7 +25,7 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
 	public PedidoModel toModel(Pedido pedido) {
 		var pedidoModel = this.createModelWithId(pedido.getId(), pedido);
 		this.mapper.map(pedido, pedidoModel);
-		pedidoModel.add(this.algaLinks.linkToPedidos());
+		pedidoModel.add(this.algaLinks.linkToPedidos("pedidos"));
 		if (pedido.podeSerConfirmado())
 			pedidoModel.add(this.algaLinks.linkToConfirmacaoPedido(pedido.getCodigo(), "confirmar"));
 		if (pedido.podeSerCancelado())

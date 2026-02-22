@@ -32,7 +32,7 @@ public class RestauranteUsuarioResponsavelController {
 		return ResponseEntity.ok(this.usuarioModelAssembler
 				.toCollectionModel(
 						this.cadastroRestauranteService.buscarOuFalharComResponsaveis(restauranteId).getResponsaveis())
-				.removeLinks().add(this.algaLinks.linkToResponsaveisRestaurante(restauranteId)));
+				.removeLinks().add(this.algaLinks.linkToRestauranteResponsaveis(restauranteId)));
 	}
 
 	@DeleteMapping("/{usuarioId}")

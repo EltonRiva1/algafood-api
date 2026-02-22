@@ -1,8 +1,8 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +44,7 @@ public class FormaPagamentoController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<?>> listar(ServletWebRequest request) {
+	public ResponseEntity<CollectionModel<?>> listar(ServletWebRequest request) {
 		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 		var eTag = "0";
 		var dataUltimaAtualizacao = this.formaPagamentoRepository.getDataUltimaAtualizacao();
