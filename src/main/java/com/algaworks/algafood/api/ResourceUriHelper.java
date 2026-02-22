@@ -11,9 +11,9 @@ public final class ResourceUriHelper {
 	}
 
 	public static void addUriInResponseHeader(Object resourceId) {
-		var uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(resourceId).toUri();
 		var attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 		if (attributes != null && attributes.getResponse() != null)
-			attributes.getResponse().setHeader(HttpHeaders.LOCATION, uri.toString());
+			attributes.getResponse().setHeader(HttpHeaders.LOCATION, ServletUriComponentsBuilder.fromCurrentRequestUri()
+					.path("/{id}").buildAndExpand(resourceId).toUri().toString());
 	}
 }

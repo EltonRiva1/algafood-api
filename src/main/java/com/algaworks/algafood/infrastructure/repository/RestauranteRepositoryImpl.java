@@ -22,31 +22,30 @@ import static com.algaworks.algafood.infrastructure.repository.spec.RestauranteS
 
 @Repository
 public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
-    @PersistenceContext
-    private EntityManager entityManager;
-    @Autowired
-    @Lazy
-    private RestauranteRepository restauranteRepository;
+	@PersistenceContext
+	private EntityManager entityManager;
+	@Autowired
+	@Lazy
+	private RestauranteRepository restauranteRepository;
 
-    @Override
-    public List<?> find(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
-        var builder = this.entityManager.getCriteriaBuilder();
-        var criteriaQuery = builder.createQuery(Restaurante.class);
-        var root = criteriaQuery.from(Restaurante.class);
-        var predicates = new ArrayList<Predicate>();
-        if (StringUtils.hasText(nome))
-            predicates.add(builder.like(root.get("nome"), "%" + nome + "%"));
-        if (taxaFreteInicial != null)
-            predicates.add(builder.greaterThanOrEqualTo(root.get("taxaFrete"), taxaFreteInicial));
-        if (taxaFreteFinal != null)
-            predicates.add(builder.lessThanOrEqualTo(root.get("taxaFrete"), taxaFreteFinal));
-        criteriaQuery.where(predicates.toArray(new Predicate[0]));
-        var typedQuery = this.entityManager.createQuery(criteriaQuery);
-        return typedQuery.getResultList();
-    }
+	@Override
+	public List<?> find(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
+		var builder = this.entityManager.getCriteriaBuilder();
+		var criteriaQuery = builder.createQuery(Restaurante.class);
+		var root = criteriaQuery.from(Restaurante.class);
+		var predicates = new ArrayList<Predicate>();
+		if (StringUtils.hasText(nome))
+			predicates.add(builder.like(root.get("nome"), "%" + nome + "%"));
+		if (taxaFreteInicial != null)
+			predicates.add(builder.greaterThanOrEqualTo(root.get("taxaFrete"), taxaFreteInicial));
+		if (taxaFreteFinal != null)
+			predicates.add(builder.lessThanOrEqualTo(root.get("taxaFrete"), taxaFreteFinal));
+		criteriaQuery.where(predicates.toArray(new Predicate[0]));
+		return this.entityManager.createQuery(criteriaQuery).getResultList();
+	}
 
-    @Override
-    public List<?> findComFreteGratis(String nome) {
-        return this.restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
-    }
+	@Override
+	public List<?> findComFreteGratis(String nome) {
+		return this.restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
+	}
 }

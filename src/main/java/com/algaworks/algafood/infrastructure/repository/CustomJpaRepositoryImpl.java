@@ -17,8 +17,8 @@ public class CustomJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> i
 
 	@Override
 	public Optional<T> buscarPrimeiro() {
-		var jpql = "from " + this.getDomainClass().getName();
-		T entity = this.entityManager.createQuery(jpql, this.getDomainClass()).setMaxResults(1).getSingleResult();
-		return Optional.ofNullable(entity);
+		return Optional.ofNullable(
+				this.entityManager.createQuery("from " + this.getDomainClass().getName(), this.getDomainClass())
+						.setMaxResults(1).getSingleResult());
 	}
 }
