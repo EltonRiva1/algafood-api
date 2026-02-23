@@ -15,14 +15,13 @@ import com.algaworks.algafood.api.ResourceUriHelper;
 import com.algaworks.algafood.api.model.input.CidadeInput;
 import com.algaworks.algafood.api.v1.assembler.CidadeInputDisassembler;
 import com.algaworks.algafood.api.v1.assembler.CidadeModelAssembler;
-import com.algaworks.algafood.core.web.AlgaMediaTypes;
 import com.algaworks.algafood.domain.repository.CidadeRepository;
 import com.algaworks.algafood.domain.service.CadastroCidadeService;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(path = "/cidades", produces = AlgaMediaTypes.V1_APPLICATION_JSON_VALUE)
+@RequestMapping("/v1/cidades")
 public class CidadeController {
 	private final CidadeRepository cidadeRepository;
 	private final CadastroCidadeService cadastroCidadeService;
