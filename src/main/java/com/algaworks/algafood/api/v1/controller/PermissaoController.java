@@ -10,7 +10,7 @@ import com.algaworks.algafood.api.v1.assembler.PermissaoModelAssembler;
 import com.algaworks.algafood.domain.repository.PermissaoRepository;
 
 @RestController
-@RequestMapping(path = "/permissoes")
+@RequestMapping(path = "/v1/permissoes")
 public class PermissaoController {
 	private final PermissaoRepository permissaoRepository;
 	private final PermissaoModelAssembler permissaoModelAssembler;

@@ -33,7 +33,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @RestController
-@RequestMapping(value = "/restaurantes")
+@RequestMapping(value = "/v1/restaurantes")
 public class RestauranteController {
 	private final RestauranteRepository restauranteRepository;
 	private final CadastroRestauranteService cadastroRestauranteService;

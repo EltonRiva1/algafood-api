@@ -14,7 +14,7 @@ import com.algaworks.algafood.api.v1.assembler.PermissaoModelAssembler;
 import com.algaworks.algafood.domain.service.CadastroGrupoService;
 
 @RestController
-@RequestMapping("/grupos/{grupoId}/permissoes")
+@RequestMapping("/v1/grupos/{grupoId}/permissoes")
 public class GrupoPermissaoController {
 	private final CadastroGrupoService cadastroGrupoService;
 	private final PermissaoModelAssembler permissaoModelAssembler;

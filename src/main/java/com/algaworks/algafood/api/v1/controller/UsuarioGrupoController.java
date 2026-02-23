@@ -14,7 +14,7 @@ import com.algaworks.algafood.api.v1.assembler.GrupoModelAssembler;
 import com.algaworks.algafood.domain.service.CadastroUsuarioService;
 
 @RestController
-@RequestMapping(value = "/usuarios/{usuarioId}/grupos")
+@RequestMapping(value = "/v1/usuarios/{usuarioId}/grupos")
 public class UsuarioGrupoController {
 	private final CadastroUsuarioService cadastroUsuarioService;
 	private final GrupoModelAssembler grupoModelAssembler;

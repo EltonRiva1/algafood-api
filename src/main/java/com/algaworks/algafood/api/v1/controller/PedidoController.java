@@ -33,7 +33,7 @@ import com.algaworks.algafood.infrastructure.repository.spec.PedidoSpecs;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/pedidos")
+@RequestMapping("/v1/pedidos")
 public class PedidoController {
 	private final PedidoRepository pedidoRepository;
 	private final EmissaoPedidoService emissaoPedidoService;

@@ -22,7 +22,7 @@ import com.algaworks.algafood.domain.service.CadastroUsuarioService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/usuarios")
+@RequestMapping(value = "/v1/usuarios")
 public class UsuarioController {
 	private final UsuarioRepository usuarioRepository;
 	private final CadastroUsuarioService cadastroUsuarioService;

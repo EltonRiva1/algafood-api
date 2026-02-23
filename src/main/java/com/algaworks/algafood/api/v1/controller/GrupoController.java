@@ -21,7 +21,7 @@ import com.algaworks.algafood.domain.service.CadastroGrupoService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/grupos")
+@RequestMapping("/v1/grupos")
 public class GrupoController {
 	private final GrupoRepository grupoRepository;
 	private final CadastroGrupoService cadastroGrupoService;

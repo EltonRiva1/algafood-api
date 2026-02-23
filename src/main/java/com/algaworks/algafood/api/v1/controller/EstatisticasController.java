@@ -15,7 +15,7 @@ import com.algaworks.algafood.domain.service.VendaQueryService;
 import com.algaworks.algafood.domain.service.VendaReportService;
 
 @RestController
-@RequestMapping(path = "/estatisticas")
+@RequestMapping(path = "/v1/estatisticas")
 public class EstatisticasController {
 	private final VendaQueryService vendaQueryService;
 	private final VendaReportService vendaReportService;

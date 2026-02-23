@@ -26,7 +26,7 @@ import com.algaworks.algafood.domain.service.CadastroFormaPagamentoService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/formas-pagamento")
+@RequestMapping("/v1/formas-pagamento")
 public class FormaPagamentoController {
 	private final FormaPagamentoRepository formaPagamentoRepository;
 	private final CadastroFormaPagamentoService cadastroFormaPagamentoService;

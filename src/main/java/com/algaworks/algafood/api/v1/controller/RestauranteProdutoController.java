@@ -23,7 +23,7 @@ import com.algaworks.algafood.domain.service.CadastroRestauranteService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/restaurantes/{restauranteId}/produtos")
+@RequestMapping("/v1/restaurantes/{restauranteId}/produtos")
 public class RestauranteProdutoController {
 	private final ProdutoRepository produtoRepository;
 	private final CadastroProdutoService cadastroProdutoService;

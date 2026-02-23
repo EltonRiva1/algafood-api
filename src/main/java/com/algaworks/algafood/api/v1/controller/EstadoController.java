@@ -21,7 +21,7 @@ import com.algaworks.algafood.domain.service.CadastroEstadoService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/estados")
+@RequestMapping("/v1/estados")
 public class EstadoController {
 	private final EstadoRepository estadoRepository;
 	private final CadastroEstadoService cadastroEstadoService;

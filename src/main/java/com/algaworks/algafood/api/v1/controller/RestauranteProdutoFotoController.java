@@ -26,7 +26,7 @@ import com.algaworks.algafood.domain.service.FotoStorageService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
+@RequestMapping("/v1/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
 public class RestauranteProdutoFotoController {
 	private final CatalogoFotoProdutoService catalogoFotoProdutoService;
 	private final CadastroProdutoService cadastroProdutoService;

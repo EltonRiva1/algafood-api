@@ -14,7 +14,7 @@ import com.algaworks.algafood.api.v1.assembler.FormaPagamentoModelAssembler;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
 
 @RestController
-@RequestMapping(value = "/restaurantes/{restauranteId}/formas-pagamento")
+@RequestMapping(value = "/v1/restaurantes/{restauranteId}/formas-pagamento")
 public class RestauranteFormaPagamentoController {
 	private final CadastroRestauranteService cadastroRestauranteService;
 	private final FormaPagamentoModelAssembler formaPagamentoModelAssembler;
