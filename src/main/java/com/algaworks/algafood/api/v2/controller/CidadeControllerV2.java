@@ -1,4 +1,4 @@
-package com.algaworks.algafood.api.v1.controller;
+package com.algaworks.algafood.api.v2.controller;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.algaworks.algafood.api.ResourceUriHelper;
-import com.algaworks.algafood.api.model.input.CidadeInput;
-import com.algaworks.algafood.api.v1.assembler.CidadeInputDisassembler;
-import com.algaworks.algafood.api.v1.assembler.CidadeModelAssembler;
+import com.algaworks.algafood.api.v2.assembler.CidadeInputDisassemblerV2;
+import com.algaworks.algafood.api.v2.assembler.CidadeModelAssemblerV2;
+import com.algaworks.algafood.api.v2.model.input.CidadeInputV2;
 import com.algaworks.algafood.core.web.AlgaMediaTypes;
 import com.algaworks.algafood.domain.repository.CidadeRepository;
 import com.algaworks.algafood.domain.service.CadastroCidadeService;
@@ -22,45 +22,45 @@ import com.algaworks.algafood.domain.service.CadastroCidadeService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(path = "/cidades", produces = AlgaMediaTypes.V1_APPLICATION_JSON_VALUE)
-public class CidadeController {
+@RequestMapping(path = "/cidades", produces = AlgaMediaTypes.V2_APPLICATION_JSON_VALUE)
+public class CidadeControllerV2 {
 	private final CidadeRepository cidadeRepository;
 	private final CadastroCidadeService cadastroCidadeService;
-	private final CidadeModelAssembler cidadeModelAssembler;
-	private final CidadeInputDisassembler cidadeInputDisassembler;
+	private final CidadeModelAssemblerV2 cidadeModelAssemblerV2;
+	private final CidadeInputDisassemblerV2 cidadeInputDisassemblerV2;
 
-	public CidadeController(CidadeRepository cidadeRepository, CadastroCidadeService cadastroCidadeService,
-			CidadeModelAssembler cidadeModelAssembler, CidadeInputDisassembler cidadeInputDisassembler) {
+	public CidadeControllerV2(CidadeRepository cidadeRepository, CadastroCidadeService cadastroCidadeService,
+			CidadeModelAssemblerV2 cidadeModelAssemblerV2, CidadeInputDisassemblerV2 cidadeInputDisassemblerV2) {
 		this.cidadeRepository = cidadeRepository;
 		this.cadastroCidadeService = cadastroCidadeService;
-		this.cidadeModelAssembler = cidadeModelAssembler;
-		this.cidadeInputDisassembler = cidadeInputDisassembler;
+		this.cidadeModelAssemblerV2 = cidadeModelAssemblerV2;
+		this.cidadeInputDisassemblerV2 = cidadeInputDisassemblerV2;
 	}
 
 	@GetMapping
 	public ResponseEntity<CollectionModel<?>> listar() {
-		return ResponseEntity.ok(this.cidadeModelAssembler.toCollectionModel(this.cidadeRepository.findAll()));
+		return ResponseEntity.ok(this.cidadeModelAssemblerV2.toCollectionModel(this.cidadeRepository.findAll()));
 	}
 
 	@GetMapping("/{cidadeId}")
 	public ResponseEntity<?> buscar(@PathVariable Long cidadeId) {
 		return ResponseEntity
-				.ok(this.cidadeModelAssembler.toModel(this.cadastroCidadeService.buscarOuFalhar(cidadeId)));
+				.ok(this.cidadeModelAssemblerV2.toModel(this.cadastroCidadeService.buscarOuFalhar(cidadeId)));
 	}
 
 	@PostMapping
-	public ResponseEntity<?> adicionar(@RequestBody @Valid CidadeInput cidadeInput) {
-		var cidadeModel = this.cidadeModelAssembler
-				.toModel(this.cadastroCidadeService.salvar(this.cidadeInputDisassembler.toDomainObject(cidadeInput)));
-		ResourceUriHelper.addUriInResponseHeader(cidadeModel.getId());
+	public ResponseEntity<?> adicionar(@RequestBody @Valid CidadeInputV2 cidadeInputV2) {
+		var cidadeModel = this.cidadeModelAssemblerV2.toModel(
+				this.cadastroCidadeService.salvar(this.cidadeInputDisassemblerV2.toDomainObject(cidadeInputV2)));
+		ResourceUriHelper.addUriInResponseHeader(cidadeModel.getIdCidade());
 		return ResponseEntity.status(HttpStatus.CREATED).body(cidadeModel);
 	}
 
 	@PutMapping("/{cidadeId}")
-	public ResponseEntity<?> atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeInput cidadeInput) {
+	public ResponseEntity<?> atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeInputV2 cidadeInputV2) {
 		var cidadeAtual = this.cadastroCidadeService.buscarOuFalhar(cidadeId);
-		this.cidadeInputDisassembler.copyToDomainObject(cidadeInput, cidadeAtual);
-		return ResponseEntity.ok(this.cidadeModelAssembler.toModel(this.cadastroCidadeService.salvar(cidadeAtual)));
+		this.cidadeInputDisassemblerV2.copyToDomainObject(cidadeInputV2, cidadeAtual);
+		return ResponseEntity.ok(this.cidadeModelAssemblerV2.toModel(this.cadastroCidadeService.salvar(cidadeAtual)));
 	}
 
 	@DeleteMapping("/{cidadeId}")
