@@ -1,8 +1,8 @@
-package com.algaworks.algafood.api.model.input;
+package com.algaworks.algafood.api.v1.model.input;
 
 import jakarta.validation.constraints.NotNull;
 
-public class RestauranteIdInput {
+public class EstadoIdInput {
 	@NotNull
 	private Long id;
 

@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.algaworks.algafood.api.model.input.RestauranteInput;
 import com.algaworks.algafood.api.v1.assembler.RestauranteApenasNomeModelAssembler;
 import com.algaworks.algafood.api.v1.assembler.RestauranteBasicoModelAssembler;
 import com.algaworks.algafood.api.v1.assembler.RestauranteInputDisassembler;
 import com.algaworks.algafood.api.v1.assembler.RestauranteModelAssembler;
+import com.algaworks.algafood.api.v1.model.input.RestauranteInput;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
 import io.swagger.v3.oas.annotations.Parameter;

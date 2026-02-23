@@ -1,8 +1,8 @@
-package com.algaworks.algafood.api.model.input;
+package com.algaworks.algafood.api.v1.model.input;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class GrupoInput {
+public class CozinhaInput {
 	@NotBlank
 	private String nome;
 

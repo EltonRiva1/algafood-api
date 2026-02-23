@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.algaworks.algafood.api.model.input.SenhaInput;
-import com.algaworks.algafood.api.model.input.UsuarioComSenhaInput;
-import com.algaworks.algafood.api.model.input.UsuarioInput;
 import com.algaworks.algafood.api.v1.assembler.UsuarioInputDisassembler;
 import com.algaworks.algafood.api.v1.assembler.UsuarioModelAssembler;
+import com.algaworks.algafood.api.v1.model.input.SenhaInput;
+import com.algaworks.algafood.api.v1.model.input.UsuarioComSenhaInput;
+import com.algaworks.algafood.api.v1.model.input.UsuarioInput;
 import com.algaworks.algafood.domain.repository.UsuarioRepository;
 import com.algaworks.algafood.domain.service.CadastroUsuarioService;
 

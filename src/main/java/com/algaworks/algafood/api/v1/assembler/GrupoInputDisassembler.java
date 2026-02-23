@@ -3,7 +3,7 @@ package com.algaworks.algafood.api.v1.assembler;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-import com.algaworks.algafood.api.model.input.GrupoInput;
+import com.algaworks.algafood.api.v1.model.input.GrupoInput;
 import com.algaworks.algafood.domain.model.Grupo;
 
 @Component

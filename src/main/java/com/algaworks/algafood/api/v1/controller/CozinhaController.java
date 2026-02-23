@@ -1,8 +1,8 @@
 package com.algaworks.algafood.api.v1.controller;
 
-import com.algaworks.algafood.api.model.input.CozinhaInput;
 import com.algaworks.algafood.api.v1.assembler.CozinhaInputDisassembler;
 import com.algaworks.algafood.api.v1.assembler.CozinhaModelAssembler;
+import com.algaworks.algafood.api.v1.model.input.CozinhaInput;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;

@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.algaworks.algafood.api.model.input.PedidoInput;
 import com.algaworks.algafood.api.v1.assembler.PedidoInputDisassembler;
 import com.algaworks.algafood.api.v1.assembler.PedidoModelAssembler;
 import com.algaworks.algafood.api.v1.assembler.PedidoResumoModelAssembler;
+import com.algaworks.algafood.api.v1.model.input.PedidoInput;
 import com.algaworks.algafood.core.data.PageWrapper;
 import com.algaworks.algafood.core.data.PageableTranslator;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
