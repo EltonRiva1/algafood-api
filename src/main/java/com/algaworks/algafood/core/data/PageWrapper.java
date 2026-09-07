@@ -4,9 +4,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.io.Serial;
+
 public class PageWrapper<T> extends PageImpl<T> {
+	@Serial
 	private static final long serialVersionUID = 1L;
-	private Pageable pageable;
+	private final Pageable pageable;
 
 	public PageWrapper(Page<T> page, Pageable pageable) {
 		super(page.getContent(), pageable, page.getTotalElements());

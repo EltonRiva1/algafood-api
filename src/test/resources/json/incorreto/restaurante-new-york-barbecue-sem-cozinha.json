@@ -1,4 +1,14 @@
 {
 	"nome": "New York Barbecue",
-	"taxaFrete": 12
+	"taxaFrete": 12,
+	"endereco": {
+		"cep": "01234-567",
+		"logradouro": "Rua das Flores",
+		"numero": "1000",
+		"complemento": "Loja 1",
+		"bairro": "Centro",
+		"cidade": {
+			"id": 1
+		}
+	}
 }

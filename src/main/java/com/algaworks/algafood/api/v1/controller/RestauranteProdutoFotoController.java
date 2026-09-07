@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.v1.assembler.FotoProdutoModelAssembler;
 import com.algaworks.algafood.api.v1.model.input.FotoProdutoInput;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.FotoProduto;
 import com.algaworks.algafood.domain.service.CadastroProdutoService;
@@ -43,6 +44,7 @@ public class RestauranteProdutoFotoController {
 	}
 
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	public ResponseEntity<?> atualizarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId,
 			@Valid FotoProdutoInput fotoProdutoInput) throws IOException {
 		var fotoProduto = new FotoProduto();
@@ -56,6 +58,7 @@ public class RestauranteProdutoFotoController {
 	}
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@CheckSecurity.Restaurantes.PodeConsultar
 	public ResponseEntity<?> buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 		return ResponseEntity.ok(this.fotoProdutoModelAssembler
 				.toModel(this.catalogoFotoProdutoService.buscarOuFalhar(restauranteId, produtoId)));
@@ -84,6 +87,7 @@ public class RestauranteProdutoFotoController {
 	}
 
 	@DeleteMapping
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	public ResponseEntity<?> excluir(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 		this.catalogoFotoProdutoService.excluir(restauranteId, produtoId);
 		return ResponseEntity.noContent().build();

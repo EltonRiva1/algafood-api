@@ -3,6 +3,7 @@ package com.algaworks.algafood.api.v2.controller;
 import com.algaworks.algafood.api.v2.assembler.CozinhaInputDisassemblerV2;
 import com.algaworks.algafood.api.v2.assembler.CozinhaModelAssemblerV2;
 import com.algaworks.algafood.api.v2.model.input.CozinhaInputV2;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
@@ -44,24 +45,28 @@ public class CozinhaControllerV2 {
 	}
 
 	@GetMapping
-	public ResponseEntity<PagedModel<?>> listar(@PageableDefault() Pageable pageable) {
+	@CheckSecurity.Cozinhas.PodeConsultar
+	public ResponseEntity<PagedModel<?>> listar(@PageableDefault Pageable pageable) {
 		return ResponseEntity.ok(this.pagedResourcesAssembler.toModel(this.cozinhaRepository.findAll(pageable),
 				this.cozinhaModelAssemblerV2));
 	}
 
 	@GetMapping("/{cozinhaId}")
+	@CheckSecurity.Cozinhas.PodeConsultar
 	public ResponseEntity<?> buscar(@PathVariable Long cozinhaId) {
 		return ResponseEntity
 				.ok(this.cozinhaModelAssemblerV2.toModel(this.cadastroCozinhaService.buscarOuFalhar(cozinhaId)));
 	}
 
 	@PostMapping
+	@CheckSecurity.Cozinhas.PodeEditar
 	public ResponseEntity<?> adicionar(@RequestBody @Valid CozinhaInputV2 cozinhaInputV2) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(this.cozinhaModelAssemblerV2.toModel(
 				this.cadastroCozinhaService.salvar(this.cozinhaInputDisassemblerV2.toDomainObject(cozinhaInputV2))));
 	}
 
 	@PutMapping("/{cozinhaId}")
+	@CheckSecurity.Cozinhas.PodeEditar
 	public ResponseEntity<?> atualizar(@PathVariable Long cozinhaId,
 			@RequestBody @Valid CozinhaInputV2 cozinhaInputV2) {
 		var cozinhaAtual = this.cadastroCozinhaService.buscarOuFalhar(cozinhaId);
@@ -71,6 +76,7 @@ public class CozinhaControllerV2 {
 	}
 
 	@DeleteMapping("/{cozinhaId}")
+	@CheckSecurity.Cozinhas.PodeEditar
 	public ResponseEntity<?> remover(@PathVariable Long cozinhaId) {
 		this.cadastroCozinhaService.excluir(cozinhaId);
 		return ResponseEntity.noContent().build();

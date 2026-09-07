@@ -3,14 +3,8 @@ package com.algaworks.algafood.infrastructure.service.email;
 import com.algaworks.algafood.core.email.EmailProperties;
 import com.algaworks.algafood.domain.service.EnvioEmailService;
 
-public class SandboxEnvioEmailService implements EnvioEmailService {
-	private final EnvioEmailService envioEmailService;
-	private final EmailProperties emailProperties;
-
-	public SandboxEnvioEmailService(EnvioEmailService envioEmailService, EmailProperties emailProperties) {
-		this.envioEmailService = envioEmailService;
-		this.emailProperties = emailProperties;
-	}
+public record SandboxEnvioEmailService(EnvioEmailService envioEmailService, EmailProperties emailProperties)
+		implements EnvioEmailService {
 
 	@Override
 	public void enviar(Mensagem mensagem) {

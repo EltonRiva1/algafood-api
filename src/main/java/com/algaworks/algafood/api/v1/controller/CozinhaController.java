@@ -3,6 +3,7 @@ package com.algaworks.algafood.api.v1.controller;
 import com.algaworks.algafood.api.v1.assembler.CozinhaInputDisassembler;
 import com.algaworks.algafood.api.v1.assembler.CozinhaModelAssembler;
 import com.algaworks.algafood.api.v1.model.input.CozinhaInput;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
@@ -47,6 +48,7 @@ public class CozinhaController {
 	}
 
 	@GetMapping
+	@CheckSecurity.Cozinhas.PodeConsultar
 	public ResponseEntity<PagedModel<?>> listar(@PageableDefault() Pageable pageable) {
 		LOGGER.info("Consultando cozinhas com páginas de {} registros...", pageable.getPageSize());
 		return ResponseEntity.ok(this.pagedResourcesAssembler.toModel(this.cozinhaRepository.findAll(pageable),
@@ -54,18 +56,21 @@ public class CozinhaController {
 	}
 
 	@GetMapping("/{cozinhaId}")
+	@CheckSecurity.Cozinhas.PodeConsultar
 	public ResponseEntity<?> buscar(@PathVariable Long cozinhaId) {
 		return ResponseEntity
 				.ok(this.cozinhaModelAssembler.toModel(this.cadastroCozinhaService.buscarOuFalhar(cozinhaId)));
 	}
 
 	@PostMapping
+	@CheckSecurity.Cozinhas.PodeEditar
 	public ResponseEntity<?> adicionar(@RequestBody @Valid CozinhaInput cozinhaInput) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(this.cozinhaModelAssembler.toModel(
 				this.cadastroCozinhaService.salvar(this.cozinhaInputDisassembler.toDomainObject(cozinhaInput))));
 	}
 
 	@PutMapping("/{cozinhaId}")
+	@CheckSecurity.Cozinhas.PodeEditar
 	public ResponseEntity<?> atualizar(@PathVariable Long cozinhaId, @RequestBody @Valid CozinhaInput cozinhaInput) {
 		var cozinhaAtual = this.cadastroCozinhaService.buscarOuFalhar(cozinhaId);
 		this.cozinhaInputDisassembler.copyToDomainObject(cozinhaInput, cozinhaAtual);
@@ -73,6 +78,7 @@ public class CozinhaController {
 	}
 
 	@DeleteMapping("/{cozinhaId}")
+	@CheckSecurity.Cozinhas.PodeEditar
 	public ResponseEntity<?> remover(@PathVariable Long cozinhaId) {
 		this.cadastroCozinhaService.excluir(cozinhaId);
 		return ResponseEntity.noContent().build();

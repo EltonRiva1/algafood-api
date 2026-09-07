@@ -1,7 +1,7 @@
 package com.algaworks.algafood.api.v1.assembler;
 
+import org.jspecify.annotations.NonNull;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
@@ -9,30 +9,41 @@ import org.springframework.stereotype.Component;
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.controller.RestauranteController;
 import com.algaworks.algafood.api.v1.model.RestauranteApenasNomeModel;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.domain.model.Restaurante;
 
 @Component
 public class RestauranteApenasNomeModelAssembler
 		extends RepresentationModelAssemblerSupport<Restaurante, RestauranteApenasNomeModel> {
-	@Autowired
-	private ModelMapper modelMapper;
-	@Autowired
-	private AlgaLinks algaLinks;
+	private final ModelMapper modelMapper;
+	private final AlgaLinks algaLinks;
+	private final AlgaSecurity algaSecurity;
 
-	public RestauranteApenasNomeModelAssembler() {
+	public RestauranteApenasNomeModelAssembler(ModelMapper modelMapper, AlgaLinks algaLinks,
+			AlgaSecurity algaSecurity) {
 		super(RestauranteController.class, RestauranteApenasNomeModel.class);
+		this.modelMapper = modelMapper;
+		this.algaLinks = algaLinks;
+		this.algaSecurity = algaSecurity;
 	}
 
 	@Override
-	public RestauranteApenasNomeModel toModel(Restaurante restaurante) {
-		var restauranteModel = this.createModelWithId(restaurante.getId(), restaurante);
+	@NonNull
+	public RestauranteApenasNomeModel toModel(@NonNull Restaurante restaurante) {
+		var restauranteModel = createModelWithId(restaurante.getId(), restaurante);
 		this.modelMapper.map(restaurante, restauranteModel);
-		restauranteModel.add(this.algaLinks.linkToRestaurantes("restaurantes"));
+		if (this.algaSecurity.podeConsultarRestaurantes())
+			restauranteModel.add(this.algaLinks.linkToRestaurantes("restaurantes"));
 		return restauranteModel;
 	}
 
 	@Override
-	public CollectionModel<RestauranteApenasNomeModel> toCollectionModel(Iterable<? extends Restaurante> entities) {
-		return super.toCollectionModel(entities).add(this.algaLinks.linkToRestaurantes());
+	@NonNull
+	public CollectionModel<RestauranteApenasNomeModel> toCollectionModel(
+			@NonNull Iterable<? extends Restaurante> entities) {
+		var collectionModel = super.toCollectionModel(entities);
+		if (this.algaSecurity.podeConsultarRestaurantes())
+			collectionModel.add(this.algaLinks.linkToRestaurantes());
+		return collectionModel;
 	}
 }

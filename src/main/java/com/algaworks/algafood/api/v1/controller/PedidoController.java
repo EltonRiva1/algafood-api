@@ -21,6 +21,8 @@ import com.algaworks.algafood.api.v1.assembler.PedidoResumoModelAssembler;
 import com.algaworks.algafood.api.v1.model.input.PedidoInput;
 import com.algaworks.algafood.core.data.PageWrapper;
 import com.algaworks.algafood.core.data.PageableTranslator;
+import com.algaworks.algafood.core.security.AlgaSecurity;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.filter.PedidoFilter;
@@ -41,19 +43,23 @@ public class PedidoController {
 	private final PedidoResumoModelAssembler pedidoResumoModelAssembler;
 	private final PedidoInputDisassembler pedidoInputDisassembler;
 	private final PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
+	private final AlgaSecurity algaSecurity;
 
 	public PedidoController(PedidoRepository pedidoRepository, EmissaoPedidoService emissaoPedidoService,
 			PedidoModelAssembler pedidoModelAssembler, PedidoResumoModelAssembler pedidoResumoModelAssembler,
-			PedidoInputDisassembler pedidoInputDisassembler, PagedResourcesAssembler<Pedido> pagedResourcesAssembler) {
+			PedidoInputDisassembler pedidoInputDisassembler, PagedResourcesAssembler<Pedido> pagedResourcesAssembler,
+			AlgaSecurity algaSecurity) {
 		this.pedidoRepository = pedidoRepository;
 		this.emissaoPedidoService = emissaoPedidoService;
 		this.pedidoModelAssembler = pedidoModelAssembler;
 		this.pedidoResumoModelAssembler = pedidoResumoModelAssembler;
 		this.pedidoInputDisassembler = pedidoInputDisassembler;
 		this.pagedResourcesAssembler = pagedResourcesAssembler;
+		this.algaSecurity = algaSecurity;
 	}
 
 	@GetMapping
+	@CheckSecurity.Pedidos.PodePesquisar
 	public ResponseEntity<PagedModel<?>> pesquisar(PedidoFilter pedidoFilter, @PageableDefault() Pageable pageable) {
 		var pedidosPage = this.pedidoRepository.findAll(PedidoSpecs.usandoFiltro(pedidoFilter),
 				this.traduzirPageable(pageable));
@@ -62,17 +68,19 @@ public class PedidoController {
 	}
 
 	@GetMapping("/{codigoPedido}")
+	@CheckSecurity.Pedidos.PodeBuscar
 	public ResponseEntity<?> buscar(@PathVariable String codigoPedido) {
 		return ResponseEntity
 				.ok(this.pedidoModelAssembler.toModel(this.emissaoPedidoService.buscarOuFalhar(codigoPedido)));
 	}
 
 	@PostMapping
+	@CheckSecurity.Pedidos.PodeCriar
 	public ResponseEntity<?> adicionar(@Valid @RequestBody PedidoInput pedidoInput) {
 		try {
 			var pedido = this.pedidoInputDisassembler.toDomainObject(pedidoInput);
 			pedido.setCliente(new Usuario());
-			pedido.getCliente().setId(1L);
+			pedido.getCliente().setId(this.algaSecurity.getUsuarioId());
 			pedido = this.emissaoPedidoService.emitir(pedido);
 			return ResponseEntity.status(HttpStatus.CREATED).body(this.pedidoModelAssembler.toModel(pedido));
 		} catch (EntidadeNaoEncontradaException e) {

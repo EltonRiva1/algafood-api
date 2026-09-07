@@ -16,4 +16,6 @@ public interface PedidoRepository extends CustomJpaRepository<Pedido, Long>, Jpa
 
 	@Query("select distinct p from Pedido p join fetch p.cliente c join fetch p.restaurante r join fetch r.cozinha join fetch p.formaPagamento left join fetch p.enderecoEntrega.cidade left join fetch p.itens i left join fetch i.produto where p.codigo = :codigo")
 	Optional<Pedido> findByCodigo(String codigo);
+
+	boolean isPedidoGerenciadoPor(String codigoPedido, Long usuarioId);
 }

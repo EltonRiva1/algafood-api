@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.v1.assembler.PermissaoModelAssembler;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.repository.PermissaoRepository;
 
 @RestController
@@ -22,6 +23,7 @@ public class PermissaoController {
 	}
 
 	@GetMapping
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	public ResponseEntity<CollectionModel<?>> listar() {
 		return ResponseEntity.ok(this.permissaoModelAssembler.toCollectionModel(this.permissaoRepository.findAll()));
 	}

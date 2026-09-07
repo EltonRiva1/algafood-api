@@ -16,6 +16,7 @@ import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.assembler.ProdutoInputDisassembler;
 import com.algaworks.algafood.api.v1.assembler.ProdutoModelAssembler;
 import com.algaworks.algafood.api.v1.model.input.ProdutoInput;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.repository.ProdutoRepository;
 import com.algaworks.algafood.domain.service.CadastroProdutoService;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
@@ -45,6 +46,7 @@ public class RestauranteProdutoController {
 	}
 
 	@GetMapping
+	@CheckSecurity.Restaurantes.PodeConsultar
 	public ResponseEntity<CollectionModel<?>> listar(@PathVariable Long restauranteId,
 			@RequestParam(required = false, defaultValue = "false") Boolean incluirInativos) {
 		var restaurante = this.cadastroRestauranteService.buscarOuFalhar(restauranteId);
@@ -55,12 +57,14 @@ public class RestauranteProdutoController {
 	}
 
 	@GetMapping("/{produtoId}")
+	@CheckSecurity.Restaurantes.PodeConsultar
 	public ResponseEntity<?> buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 		return ResponseEntity.ok(this.produtoModelAssembler
 				.toModel(this.cadastroProdutoService.buscarOuFalhar(restauranteId, produtoId)));
 	}
 
 	@PostMapping
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	public ResponseEntity<?> adicionar(@PathVariable Long restauranteId,
 			@RequestBody @Valid ProdutoInput produtoInput) {
 		var produto = this.produtoInputDisassembler.toDomainObject(produtoInput);
@@ -70,6 +74,7 @@ public class RestauranteProdutoController {
 	}
 
 	@PutMapping("/{produtoId}")
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	public ResponseEntity<?> atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId,
 			@RequestBody @Valid ProdutoInput produtoInput) {
 		var produtoAtual = this.cadastroProdutoService.buscarOuFalhar(restauranteId, produtoId);

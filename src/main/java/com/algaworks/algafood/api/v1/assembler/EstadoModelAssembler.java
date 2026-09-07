@@ -1,7 +1,7 @@
 package com.algaworks.algafood.api.v1.assembler;
 
+import org.jspecify.annotations.NonNull;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
@@ -9,28 +9,38 @@ import org.springframework.stereotype.Component;
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.controller.EstadoController;
 import com.algaworks.algafood.api.v1.model.EstadoModel;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.domain.model.Estado;
 
 @Component
 public class EstadoModelAssembler extends RepresentationModelAssemblerSupport<Estado, EstadoModel> {
-	@Autowired
-	private ModelMapper mapper;
-	@Autowired
-	private AlgaLinks algaLinks;
+	private final ModelMapper mapper;
+	private final AlgaLinks algaLinks;
+	private final AlgaSecurity algaSecurity;
 
-	public EstadoModelAssembler() {
+	public EstadoModelAssembler(ModelMapper mapper, AlgaLinks algaLinks, AlgaSecurity algaSecurity) {
 		super(EstadoController.class, EstadoModel.class);
+		this.mapper = mapper;
+		this.algaLinks = algaLinks;
+		this.algaSecurity = algaSecurity;
 	}
 
 	@Override
-	public EstadoModel toModel(Estado estado) {
-		var estadoModel = this.createModelWithId(estado.getId(), estado);
+	@NonNull
+	public EstadoModel toModel(@NonNull Estado estado) {
+		var estadoModel = createModelWithId(estado.getId(), estado);
 		this.mapper.map(estado, estadoModel);
-		return estadoModel.add(this.algaLinks.linkToEstados("estados"));
+		if (this.algaSecurity.podeConsultarEstados())
+			estadoModel.add(this.algaLinks.linkToEstados("estados"));
+		return estadoModel;
 	}
 
 	@Override
-	public CollectionModel<EstadoModel> toCollectionModel(Iterable<? extends Estado> entities) {
-		return super.toCollectionModel(entities).add(this.algaLinks.linkToEstados());
+	@NonNull
+	public CollectionModel<EstadoModel> toCollectionModel(@NonNull Iterable<? extends Estado> entities) {
+		var collectionModel = super.toCollectionModel(entities);
+		if (algaSecurity.podeConsultarEstados())
+			collectionModel.add(algaLinks.linkToEstados());
+		return collectionModel;
 	}
 }

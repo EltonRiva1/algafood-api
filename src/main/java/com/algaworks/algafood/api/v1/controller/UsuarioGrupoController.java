@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.assembler.GrupoModelAssembler;
+import com.algaworks.algafood.core.security.AlgaSecurity;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.service.CadastroUsuarioService;
 
 @RestController
@@ -19,33 +21,37 @@ public class UsuarioGrupoController {
 	private final CadastroUsuarioService cadastroUsuarioService;
 	private final GrupoModelAssembler grupoModelAssembler;
 	private final AlgaLinks algaLinks;
+	private final AlgaSecurity algaSecurity;
 
 	public UsuarioGrupoController(CadastroUsuarioService cadastroUsuarioService,
-			GrupoModelAssembler grupoModelAssembler, AlgaLinks algaLinks) {
+			GrupoModelAssembler grupoModelAssembler, AlgaLinks algaLinks, AlgaSecurity algaSecurity) {
 		this.cadastroUsuarioService = cadastroUsuarioService;
 		this.grupoModelAssembler = grupoModelAssembler;
 		this.algaLinks = algaLinks;
+		this.algaSecurity = algaSecurity;
 	}
 
 	@GetMapping
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	public ResponseEntity<CollectionModel<?>> listar(@PathVariable Long usuarioId) {
 		var gruposModel = this.grupoModelAssembler
-				.toCollectionModel(this.cadastroUsuarioService.buscarOuFalhar(usuarioId).getGrupos()).removeLinks()
-				.add(this.algaLinks.linkToUsuarioGrupoAssociacao(usuarioId, "associar"));
-		gruposModel.getContent().forEach(grupoModel -> {
-			grupoModel
-					.add(this.algaLinks.linkToUsuarioGrupoDesassociacao(usuarioId, grupoModel.getId(), "desassociar"));
-		});
+				.toCollectionModel(this.cadastroUsuarioService.buscarOuFalhar(usuarioId).getGrupos()).removeLinks();
+		if (this.algaSecurity.podeEditarUsuariosGruposPermissoes())
+			gruposModel.add(this.algaLinks.linkToUsuarioGrupoAssociacao(usuarioId, "associar")).getContent()
+					.forEach(grupoModel -> grupoModel.add(this.algaLinks.linkToUsuarioGrupoDesassociacao(usuarioId,
+							grupoModel.getId(), "desassociar")));
 		return ResponseEntity.ok(gruposModel);
 	}
 
 	@DeleteMapping("/{grupoId}")
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	public ResponseEntity<?> desassociar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
 		this.cadastroUsuarioService.desassociarGrupo(usuarioId, grupoId);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping("/{grupoId}")
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	public ResponseEntity<?> associar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
 		this.cadastroUsuarioService.associarGrupo(usuarioId, grupoId);
 		return ResponseEntity.noContent().build();

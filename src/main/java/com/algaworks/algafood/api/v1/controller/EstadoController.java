@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.algaworks.algafood.api.v1.assembler.EstadoInputDisassembler;
 import com.algaworks.algafood.api.v1.assembler.EstadoModelAssembler;
 import com.algaworks.algafood.api.v1.model.input.EstadoInput;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.repository.EstadoRepository;
 import com.algaworks.algafood.domain.service.CadastroEstadoService;
 
@@ -37,23 +38,27 @@ public class EstadoController {
 	}
 
 	@GetMapping
+	@CheckSecurity.Estados.PodeConsultar
 	public ResponseEntity<CollectionModel<?>> listar() {
 		return ResponseEntity.ok(this.estadoModelAssembler.toCollectionModel(this.estadoRepository.findAll()));
 	}
 
 	@GetMapping("/{estadoId}")
+	@CheckSecurity.Estados.PodeConsultar
 	public ResponseEntity<?> buscar(@PathVariable Long estadoId) {
 		return ResponseEntity
 				.ok(this.estadoModelAssembler.toModel(this.cadastroEstadoService.buscarOuFalhar(estadoId)));
 	}
 
 	@PostMapping
+	@CheckSecurity.Estados.PodeEditar
 	public ResponseEntity<?> adicionar(@RequestBody @Valid EstadoInput estadoInput) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(this.estadoModelAssembler
 				.toModel(this.cadastroEstadoService.salvar(this.estadoInputDisassembler.toDomainObject(estadoInput))));
 	}
 
 	@PutMapping("/{estadoId}")
+	@CheckSecurity.Estados.PodeEditar
 	public ResponseEntity<?> atualizar(@PathVariable Long estadoId, @RequestBody @Valid EstadoInput estadoInput) {
 		var estadoAtual = this.cadastroEstadoService.buscarOuFalhar(estadoId);
 		this.estadoInputDisassembler.copyToDomainObject(estadoInput, estadoAtual);
@@ -61,6 +66,7 @@ public class EstadoController {
 	}
 
 	@DeleteMapping("/{estadoId}")
+	@CheckSecurity.Estados.PodeEditar
 	public ResponseEntity<?> remover(@PathVariable Long estadoId) {
 		this.cadastroEstadoService.excluir(estadoId);
 		return ResponseEntity.noContent().build();

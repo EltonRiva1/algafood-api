@@ -5,7 +5,6 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.domain.AbstractAggregateRoot;
@@ -26,7 +25,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
 
 @Entity
 public class Pedido extends AbstractAggregateRoot<Pedido> {
@@ -225,11 +223,6 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
 			throw new NegocioException(String.format("Status do pedido %s não pode ser alterado de %s para %s",
 					this.getCodigo(), this.getStatus().getDescricao(), statusPedido.getDescricao()));
 		this.status = statusPedido;
-	}
-
-	@PrePersist
-	private void gerarCodigo() {
-		this.setCodigo(UUID.randomUUID().toString());
 	}
 
 	public boolean podeSerConfirmado() {

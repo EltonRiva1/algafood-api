@@ -38,4 +38,5 @@ public interface RestauranteRepository extends CustomJpaRepository<Restaurante, 
 	@Query("select distinct r from Restaurante r join fetch r.cozinha left join fetch r.endereco.cidade left join fetch r.responsaveis where r.id = :id")
 	Optional<Restaurante> findByIdFetchingResponsaveis(@Param("id") Long id);
 
+	boolean existsResponsavel(Long restauranteId, Long usuarioId);
 }

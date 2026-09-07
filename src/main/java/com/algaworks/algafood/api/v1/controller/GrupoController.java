@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.algaworks.algafood.api.v1.assembler.GrupoInputDisassembler;
 import com.algaworks.algafood.api.v1.assembler.GrupoModelAssembler;
 import com.algaworks.algafood.api.v1.model.input.GrupoInput;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.repository.GrupoRepository;
 import com.algaworks.algafood.domain.service.CadastroGrupoService;
 
@@ -37,22 +38,26 @@ public class GrupoController {
 	}
 
 	@GetMapping
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	public ResponseEntity<CollectionModel<?>> listar() {
 		return ResponseEntity.ok(this.grupoModelAssembler.toCollectionModel(this.grupoRepository.findAll()));
 	}
 
 	@GetMapping("/{grupoId}")
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	public ResponseEntity<?> buscar(@PathVariable Long grupoId) {
 		return ResponseEntity.ok(this.grupoModelAssembler.toModel(this.cadastroGrupoService.buscarOuFalhar(grupoId)));
 	}
 
 	@PostMapping
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	public ResponseEntity<?> adicionar(@RequestBody @Valid GrupoInput grupoInput) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(this.grupoModelAssembler
 				.toModel(this.cadastroGrupoService.salvar(this.grupoInputDisassembler.toDomainObject(grupoInput))));
 	}
 
 	@PutMapping("/{grupoId}")
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	public ResponseEntity<?> atualizar(@PathVariable Long grupoId, @RequestBody @Valid GrupoInput grupoInput) {
 		var grupoAtual = this.cadastroGrupoService.buscarOuFalhar(grupoId);
 		this.grupoInputDisassembler.copyToDomainObject(grupoInput, grupoAtual);
@@ -60,6 +65,7 @@ public class GrupoController {
 	}
 
 	@DeleteMapping("/{grupoId}")
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	public ResponseEntity<?> remover(@PathVariable Long grupoId) {
 		this.cadastroGrupoService.excluir(grupoId);
 		return ResponseEntity.noContent().build();

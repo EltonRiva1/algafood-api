@@ -5,17 +5,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import com.algaworks.algafood.core.email.EmailProperties;
 import com.algaworks.algafood.domain.service.EnvioEmailService;
 
-public class SmtpEnvioEmailService implements EnvioEmailService {
-	private final JavaMailSender javaMailSender;
-	private final EmailProperties emailProperties;
-	private final ProcessadorEmailTemplate processadorEmailTemplate;
-
-	public SmtpEnvioEmailService(JavaMailSender javaMailSender, EmailProperties emailProperties,
-			ProcessadorEmailTemplate processadorEmailTemplate) {
-		this.javaMailSender = javaMailSender;
-		this.emailProperties = emailProperties;
-		this.processadorEmailTemplate = processadorEmailTemplate;
-	}
+public record SmtpEnvioEmailService(JavaMailSender javaMailSender, EmailProperties emailProperties,
+		ProcessadorEmailTemplate processadorEmailTemplate) implements EnvioEmailService {
 
 	@Override
 	public void enviar(Mensagem mensagem) {

@@ -20,6 +20,7 @@ import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import com.algaworks.algafood.api.v1.assembler.FormaPagamentoInputDisassembler;
 import com.algaworks.algafood.api.v1.assembler.FormaPagamentoModelAssembler;
 import com.algaworks.algafood.api.v1.model.input.FormaPagamentoInput;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.repository.FormaPagamentoRepository;
 import com.algaworks.algafood.domain.service.CadastroFormaPagamentoService;
 
@@ -44,6 +45,7 @@ public class FormaPagamentoController {
 	}
 
 	@GetMapping
+	@CheckSecurity.FormasPagamento.PodeConsultar
 	public ResponseEntity<CollectionModel<?>> listar(ServletWebRequest request) {
 		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 		var eTag = "0";
@@ -57,6 +59,7 @@ public class FormaPagamentoController {
 	}
 
 	@GetMapping("/{formaPagamentoId}")
+	@CheckSecurity.FormasPagamento.PodeConsultar
 	public ResponseEntity<?> buscar(@PathVariable Long formaPagamentoId, ServletWebRequest request) {
 		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 		var eTag = "0";
@@ -71,6 +74,7 @@ public class FormaPagamentoController {
 	}
 
 	@PostMapping
+	@CheckSecurity.FormasPagamento.PodeEditar
 	public ResponseEntity<?> adicionar(@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(this.formaPagamentoModelAssembler.toModel(this.cadastroFormaPagamentoService
@@ -78,6 +82,7 @@ public class FormaPagamentoController {
 	}
 
 	@PutMapping("/{formaPagamentoId}")
+	@CheckSecurity.FormasPagamento.PodeEditar
 	public ResponseEntity<?> atualizar(@PathVariable Long formaPagamentoId,
 			@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
 		var formaPagamentoAtual = this.cadastroFormaPagamentoService.buscarOuFalhar(formaPagamentoId);
@@ -87,6 +92,7 @@ public class FormaPagamentoController {
 	}
 
 	@DeleteMapping("/{formaPagamentoId}")
+	@CheckSecurity.FormasPagamento.PodeEditar
 	public ResponseEntity<?> remover(@PathVariable Long formaPagamentoId) {
 		this.cadastroFormaPagamentoService.excluir(formaPagamentoId);
 		return ResponseEntity.noContent().build();

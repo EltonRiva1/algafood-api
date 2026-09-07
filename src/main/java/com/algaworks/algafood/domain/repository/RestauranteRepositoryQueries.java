@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface RestauranteRepositoryQueries {
 
-    List<?> find(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal);
+	List<?> find(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal);
 
-    List<?> findComFreteGratis(String nome);
+	List<?> findComFreteGratis(String nome);
 }

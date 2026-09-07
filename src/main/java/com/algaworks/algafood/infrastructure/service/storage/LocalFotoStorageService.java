@@ -8,12 +8,7 @@ import org.springframework.util.FileCopyUtils;
 import com.algaworks.algafood.core.storage.StorageProperties;
 import com.algaworks.algafood.domain.service.FotoStorageService;
 
-public class LocalFotoStorageService implements FotoStorageService {
-	private final StorageProperties storageProperties;
-
-	public LocalFotoStorageService(StorageProperties storageProperties) {
-		this.storageProperties = storageProperties;
-	}
+public record LocalFotoStorageService(StorageProperties storageProperties) implements FotoStorageService {
 
 	@Override
 	public void armazenar(NovaFoto novaFoto) {
@@ -41,8 +36,8 @@ public class LocalFotoStorageService implements FotoStorageService {
 	@Override
 	public FotoRecuperada recuperar(String nomeArquivo) {
 		try {
-			return new FotoStorageService.FotoRecuperada.Builder()
-					.inputStream(Files.newInputStream(this.getArquivoPath(nomeArquivo))).build();
+			return new FotoRecuperada.Builder().inputStream(Files.newInputStream(this.getArquivoPath(nomeArquivo)))
+					.build();
 		} catch (Exception e) {
 			throw new StorageException("Não foi possível recuperar arquivo.", e);
 		}

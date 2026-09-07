@@ -6,12 +6,7 @@ import com.algaworks.algafood.domain.service.EnvioEmailService.Mensagem;
 
 import freemarker.template.Configuration;
 
-public class ProcessadorEmailTemplate {
-	private final Configuration configuration;
-
-	public ProcessadorEmailTemplate(Configuration configuration) {
-		this.configuration = configuration;
-	}
+public record ProcessadorEmailTemplate(Configuration configuration) {
 
 	public String processar(Mensagem mensagem) {
 		try {

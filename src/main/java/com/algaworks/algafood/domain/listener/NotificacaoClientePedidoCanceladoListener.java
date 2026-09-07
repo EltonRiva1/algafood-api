@@ -18,7 +18,8 @@ public class NotificacaoClientePedidoCanceladoListener {
 	public void aoCancelarPedido(PedidoCanceladoEvent pedidoCanceladoEvent) {
 		var pedido = pedidoCanceladoEvent.pedido();
 		this.envioEmailService.enviar(new EnvioEmailService.Mensagem.Builder()
-				.assunto(pedido.getRestaurante().getNome() + " - Pedido cancelado").corpo("pedido-cancelado.html")
-				.variavel("pedido", pedido).destinatario(pedido.getCliente().getEmail()).build());
+				.assunto(pedido.getRestaurante().getNome() + " - Pedido cancelado")
+				.corpo("emails/pedido-cancelado.html").variavel("pedido", pedido)
+				.destinatario(pedido.getCliente().getEmail()).build());
 	}
 }

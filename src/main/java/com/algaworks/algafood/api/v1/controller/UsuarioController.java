@@ -16,6 +16,7 @@ import com.algaworks.algafood.api.v1.assembler.UsuarioModelAssembler;
 import com.algaworks.algafood.api.v1.model.input.SenhaInput;
 import com.algaworks.algafood.api.v1.model.input.UsuarioComSenhaInput;
 import com.algaworks.algafood.api.v1.model.input.UsuarioInput;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.repository.UsuarioRepository;
 import com.algaworks.algafood.domain.service.CadastroUsuarioService;
 
@@ -38,17 +39,20 @@ public class UsuarioController {
 	}
 
 	@GetMapping
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	public ResponseEntity<CollectionModel<?>> listar() {
 		return ResponseEntity.ok(this.usuarioModelAssembler.toCollectionModel(this.usuarioRepository.findAll()));
 	}
 
 	@GetMapping("/{usuarioId}")
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	public ResponseEntity<?> buscar(@PathVariable Long usuarioId) {
 		return ResponseEntity
 				.ok(this.usuarioModelAssembler.toModel(this.cadastroUsuarioService.buscarOuFalhar(usuarioId)));
 	}
 
 	@PostMapping
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	public ResponseEntity<?> adicionar(@RequestBody @Valid UsuarioComSenhaInput usuarioComSenhaInput) {
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(this.usuarioModelAssembler.toModel(this.cadastroUsuarioService
@@ -56,6 +60,7 @@ public class UsuarioController {
 	}
 
 	@PutMapping("/{usuarioId}")
+	@CheckSecurity.UsuariosGruposPermissoes.PodeAlterarUsuario
 	public ResponseEntity<?> atualizar(@PathVariable Long usuarioId, @RequestBody @Valid UsuarioInput usuarioInput) {
 		var usuarioAtual = this.cadastroUsuarioService.buscarOuFalhar(usuarioId);
 		this.usuarioInputDisassembler.copyToDomainObject(usuarioInput, usuarioAtual);
@@ -63,6 +68,7 @@ public class UsuarioController {
 	}
 
 	@PutMapping("/{usuarioId}/senha")
+	@CheckSecurity.UsuariosGruposPermissoes.PodeAlterarPropriaSenha
 	public ResponseEntity<?> alterarSenha(@PathVariable Long usuarioId, @RequestBody @Valid SenhaInput senhaInput) {
 		this.cadastroUsuarioService.alterarSenha(usuarioId, senhaInput.getSenhaAtual(), senhaInput.getNovaSenha());
 		return ResponseEntity.noContent().build();

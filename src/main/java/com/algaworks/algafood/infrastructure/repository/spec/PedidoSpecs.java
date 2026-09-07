@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class PedidoSpecs {
 	public static Specification<Pedido> usandoFiltro(PedidoFilter pedidoFilter) {
 		return (root, query, builder) -> {
+			assert query != null;
 			if (Pedido.class.equals(query.getResultType())) {
 				root.fetch("restaurante").fetch("cozinha");
 				root.fetch("cliente");

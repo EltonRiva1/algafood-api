@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.service.FluxoPedidoService;
 
 @RestController
@@ -18,18 +19,21 @@ public class FluxoPedidoController {
 	}
 
 	@PutMapping("/confirmacao")
+	@CheckSecurity.Pedidos.PodeGerenciarPedidos
 	public ResponseEntity<?> confirmar(@PathVariable String codigoPedido) {
 		this.fluxoPedidoService.confirmar(codigoPedido);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping("/cancelamento")
+	@CheckSecurity.Pedidos.PodeGerenciarPedidos
 	public ResponseEntity<?> cancelar(@PathVariable String codigoPedido) {
 		this.fluxoPedidoService.cancelar(codigoPedido);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping("/entrega")
+	@CheckSecurity.Pedidos.PodeGerenciarPedidos
 	public ResponseEntity<?> entregar(@PathVariable String codigoPedido) {
 		this.fluxoPedidoService.entregar(codigoPedido);
 		return ResponseEntity.noContent().build();

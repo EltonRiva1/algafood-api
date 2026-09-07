@@ -65,7 +65,7 @@ public class AlgaLinks {
 	}
 
 	public Link linkToRestaurante(Long restauranteId) {
-		return this.linkToRestaurante(restauranteId, IanaLinkRelations.SELF_VALUE);
+		return this.linkToRestaurante(restauranteId, IanaLinkRelations.SELF.value());
 	}
 
 	public Link linkToRestaurantes(String rel) {
@@ -124,7 +124,7 @@ public class AlgaLinks {
 	}
 
 	public Link linkToUsuario(Long usuarioId) {
-		return this.linkToUsuario(usuarioId, IanaLinkRelations.SELF_VALUE);
+		return this.linkToUsuario(usuarioId, IanaLinkRelations.SELF.value());
 	}
 
 	public Link linkToUsuarios(String rel) {
@@ -132,7 +132,7 @@ public class AlgaLinks {
 	}
 
 	public Link linkToUsuarios() {
-		return this.linkToUsuarios(IanaLinkRelations.SELF_VALUE);
+		return this.linkToUsuarios(IanaLinkRelations.SELF.value());
 	}
 
 	public Link linkToUsuarioGrupoAssociacao(Long usuarioId, String rel) {
@@ -153,7 +153,7 @@ public class AlgaLinks {
 	}
 
 	public Link linkToGruposUsuario(Long usuarioId) {
-		return this.linkToGruposUsuario(usuarioId, IanaLinkRelations.SELF_VALUE);
+		return this.linkToGruposUsuario(usuarioId, IanaLinkRelations.SELF.value());
 	}
 
 	public Link linkToGrupos(String rel) {

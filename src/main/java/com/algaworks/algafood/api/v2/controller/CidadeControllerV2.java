@@ -15,6 +15,7 @@ import com.algaworks.algafood.api.ResourceUriHelper;
 import com.algaworks.algafood.api.v2.assembler.CidadeInputDisassemblerV2;
 import com.algaworks.algafood.api.v2.assembler.CidadeModelAssemblerV2;
 import com.algaworks.algafood.api.v2.model.input.CidadeInputV2;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.repository.CidadeRepository;
 import com.algaworks.algafood.domain.service.CadastroCidadeService;
 
@@ -37,17 +38,20 @@ public class CidadeControllerV2 {
 	}
 
 	@GetMapping
+	@CheckSecurity.Cidades.PodeConsultar
 	public ResponseEntity<CollectionModel<?>> listar() {
 		return ResponseEntity.ok(this.cidadeModelAssemblerV2.toCollectionModel(this.cidadeRepository.findAll()));
 	}
 
 	@GetMapping("/{cidadeId}")
+	@CheckSecurity.Cidades.PodeConsultar
 	public ResponseEntity<?> buscar(@PathVariable Long cidadeId) {
 		return ResponseEntity
 				.ok(this.cidadeModelAssemblerV2.toModel(this.cadastroCidadeService.buscarOuFalhar(cidadeId)));
 	}
 
 	@PostMapping
+	@CheckSecurity.Cidades.PodeEditar
 	public ResponseEntity<?> adicionar(@RequestBody @Valid CidadeInputV2 cidadeInputV2) {
 		var cidadeModel = this.cidadeModelAssemblerV2.toModel(
 				this.cadastroCidadeService.salvar(this.cidadeInputDisassemblerV2.toDomainObject(cidadeInputV2)));
@@ -56,6 +60,7 @@ public class CidadeControllerV2 {
 	}
 
 	@PutMapping("/{cidadeId}")
+	@CheckSecurity.Cidades.PodeEditar
 	public ResponseEntity<?> atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeInputV2 cidadeInputV2) {
 		var cidadeAtual = this.cadastroCidadeService.buscarOuFalhar(cidadeId);
 		this.cidadeInputDisassemblerV2.copyToDomainObject(cidadeInputV2, cidadeAtual);
@@ -63,6 +68,7 @@ public class CidadeControllerV2 {
 	}
 
 	@DeleteMapping("/{cidadeId}")
+	@CheckSecurity.Cidades.PodeEditar
 	public ResponseEntity<?> remover(@PathVariable Long cidadeId) {
 		this.cadastroCidadeService.excluir(cidadeId);
 		return ResponseEntity.noContent().build();
