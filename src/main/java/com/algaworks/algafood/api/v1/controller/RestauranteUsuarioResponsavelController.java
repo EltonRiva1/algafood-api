@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.assembler.UsuarioModelAssembler;
+import com.algaworks.algafood.api.v1.openapi.controller.RestauranteUsuarioResponsavelControllerOpenApi;
 import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
 
 @RestController
 @RequestMapping("/v1/restaurantes/{restauranteId}/responsaveis")
-public class RestauranteUsuarioResponsavelController {
+public class RestauranteUsuarioResponsavelController implements RestauranteUsuarioResponsavelControllerOpenApi {
 	private final CadastroRestauranteService cadastroRestauranteService;
 	private final UsuarioModelAssembler usuarioModelAssembler;
 	private final AlgaLinks algaLinks;

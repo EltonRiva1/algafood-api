@@ -15,6 +15,7 @@ import com.algaworks.algafood.api.ResourceUriHelper;
 import com.algaworks.algafood.api.v1.assembler.CidadeInputDisassembler;
 import com.algaworks.algafood.api.v1.assembler.CidadeModelAssembler;
 import com.algaworks.algafood.api.v1.model.input.CidadeInput;
+import com.algaworks.algafood.api.v1.openapi.controller.CidadeControllerOpenApi;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.repository.CidadeRepository;
 import com.algaworks.algafood.domain.service.CadastroCidadeService;
@@ -23,7 +24,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/v1/cidades")
-public class CidadeController {
+public class CidadeController implements CidadeControllerOpenApi {
 	private final CidadeRepository cidadeRepository;
 	private final CadastroCidadeService cadastroCidadeService;
 	private final CidadeModelAssembler cidadeModelAssembler;

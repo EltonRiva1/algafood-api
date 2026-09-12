@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.assembler.FormaPagamentoModelAssembler;
+import com.algaworks.algafood.api.v1.openapi.controller.RestauranteFormaPagamentoControllerOpenApi;
 import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
 
 @RestController
 @RequestMapping(value = "/v1/restaurantes/{restauranteId}/formas-pagamento")
-public class RestauranteFormaPagamentoController {
+public class RestauranteFormaPagamentoController implements RestauranteFormaPagamentoControllerOpenApi {
 	private final CadastroRestauranteService cadastroRestauranteService;
 	private final FormaPagamentoModelAssembler formaPagamentoModelAssembler;
 	private final AlgaLinks algaLinks;

@@ -19,8 +19,12 @@ import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.repository.CidadeRepository;
 import com.algaworks.algafood.domain.service.CadastroCidadeService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+@SecurityRequirement(name = "security_auth")
+@Tag(name = "Cidades v2", description = "Gerencia as cidades na versão 2 da API")
 @RestController
 @RequestMapping("/v2/cidades")
 public class CidadeControllerV2 {

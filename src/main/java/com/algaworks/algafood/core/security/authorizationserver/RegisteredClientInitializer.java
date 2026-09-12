@@ -31,6 +31,14 @@ public class RegisteredClientInitializer implements ApplicationRunner {
 	public void run(ApplicationArguments args) {
 		var tokenSettings = TokenSettings.builder().accessTokenTimeToLive(Duration.ofMinutes(30))
 				.refreshTokenTimeToLive(Duration.ofDays(30)).reuseRefreshTokens(false).build();
+		saveIfMissing(RegisteredClient.withId(UUID.randomUUID().toString()).clientId("swagger-ui")
+				.clientSecret(passwordEncoder.encode("swagger123"))
+				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+				.redirectUri("http://localhost:8080/swagger-ui/oauth2-redirect.html").scope("READ").scope("WRITE")
+				.clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
+				.tokenSettings(tokenSettings).build());
 		saveIfMissing(RegisteredClient.withId(UUID.randomUUID().toString()).clientId("algafood-web")
 				.clientSecret(passwordEncoder.encode("web123"))
 				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)

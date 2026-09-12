@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.v1.assembler.FotoProdutoModelAssembler;
 import com.algaworks.algafood.api.v1.model.input.FotoProdutoInput;
+import com.algaworks.algafood.api.v1.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.FotoProduto;
@@ -28,7 +29,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/v1/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
-public class RestauranteProdutoFotoController {
+public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
 	private final CatalogoFotoProdutoService catalogoFotoProdutoService;
 	private final CadastroProdutoService cadastroProdutoService;
 	private final FotoProdutoModelAssembler fotoProdutoModelAssembler;

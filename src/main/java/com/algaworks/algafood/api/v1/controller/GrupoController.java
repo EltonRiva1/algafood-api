@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.algaworks.algafood.api.v1.assembler.GrupoInputDisassembler;
 import com.algaworks.algafood.api.v1.assembler.GrupoModelAssembler;
 import com.algaworks.algafood.api.v1.model.input.GrupoInput;
+import com.algaworks.algafood.api.v1.openapi.controller.GrupoControllerOpenApi;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.repository.GrupoRepository;
 import com.algaworks.algafood.domain.service.CadastroGrupoService;
@@ -23,7 +24,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/v1/grupos")
-public class GrupoController {
+public class GrupoController implements GrupoControllerOpenApi {
 	private final GrupoRepository grupoRepository;
 	private final CadastroGrupoService cadastroGrupoService;
 	private final GrupoModelAssembler grupoModelAssembler;

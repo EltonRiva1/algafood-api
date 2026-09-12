@@ -8,6 +8,8 @@ import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 import org.springframework.data.domain.Pageable;
@@ -25,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@SecurityRequirement(name = "security_auth")
+@Tag(name = "Cozinhas v2", description = "Gerencia as cozinhas na versão 2 da API")
 @RestController
 @RequestMapping(value = "/v2/cozinhas")
 public class CozinhaControllerV2 {

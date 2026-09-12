@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.assembler.GrupoModelAssembler;
+import com.algaworks.algafood.api.v1.openapi.controller.UsuarioGrupoControllerOpenApi;
 import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.service.CadastroUsuarioService;
 
 @RestController
 @RequestMapping(value = "/v1/usuarios/{usuarioId}/grupos")
-public class UsuarioGrupoController {
+public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 	private final CadastroUsuarioService cadastroUsuarioService;
 	private final GrupoModelAssembler grupoModelAssembler;
 	private final AlgaLinks algaLinks;

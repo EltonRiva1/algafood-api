@@ -39,9 +39,9 @@ public class AuthorizationServerConfig {
 	@Bean
 	@Order(3)
 	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-		return http.authorizeHttpRequests(
-				authorize -> authorize.requestMatchers("/login", "/error").permitAll().anyRequest().authenticated())
-				.formLogin(Customizer.withDefaults()).build();
+		return http.authorizeHttpRequests(authorize -> authorize
+				.requestMatchers("/login", "/error", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**")
+				.permitAll().anyRequest().authenticated()).formLogin(Customizer.withDefaults()).build();
 	}
 
 	@Bean

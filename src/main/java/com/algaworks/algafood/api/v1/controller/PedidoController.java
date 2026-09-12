@@ -19,6 +19,7 @@ import com.algaworks.algafood.api.v1.assembler.PedidoInputDisassembler;
 import com.algaworks.algafood.api.v1.assembler.PedidoModelAssembler;
 import com.algaworks.algafood.api.v1.assembler.PedidoResumoModelAssembler;
 import com.algaworks.algafood.api.v1.model.input.PedidoInput;
+import com.algaworks.algafood.api.v1.openapi.controller.PedidoControllerOpenApi;
 import com.algaworks.algafood.core.data.PageWrapper;
 import com.algaworks.algafood.core.data.PageableTranslator;
 import com.algaworks.algafood.core.security.AlgaSecurity;
@@ -36,7 +37,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/v1/pedidos")
-public class PedidoController {
+public class PedidoController implements PedidoControllerOpenApi {
 	private final PedidoRepository pedidoRepository;
 	private final EmissaoPedidoService emissaoPedidoService;
 	private final PedidoModelAssembler pedidoModelAssembler;

@@ -5,11 +5,24 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Schema(name = "Problema")
 public class Problem {
+	@Schema(example = "400")
 	private final Integer status;
+	@Schema(example = "2026-09-07T11:21:50.902245498Z")
 	private final OffsetDateTime timestamp;
-	private final String type, title, detail, userMessage;
+	@Schema(example = "https://algafood.com.br/dados-invalidos")
+	private final String type;
+	@Schema(example = "Dados inválidos")
+	private final String title;
+	@Schema(example = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.")
+	private final String detail;
+	@Schema(example = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.")
+	private final String userMessage;
+	@Schema(description = "Lista de objetos ou campos que geraram o erro")
 	private final List<Object> objects;
 
 	private Problem(Builder builder) {
@@ -96,6 +109,8 @@ public class Problem {
 		}
 	}
 
-	public record Object(String name, String userMessage) {
+	@Schema(name = "ObjetoProblema")
+	public record Object(@Schema(example = "preço") String name,
+			@Schema(example = "O preço é inválido") String userMessage) {
 	}
 }

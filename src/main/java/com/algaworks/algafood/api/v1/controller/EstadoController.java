@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.algaworks.algafood.api.v1.assembler.EstadoInputDisassembler;
 import com.algaworks.algafood.api.v1.assembler.EstadoModelAssembler;
 import com.algaworks.algafood.api.v1.model.input.EstadoInput;
+import com.algaworks.algafood.api.v1.openapi.controller.EstadoControllerOpenApi;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.repository.EstadoRepository;
 import com.algaworks.algafood.domain.service.CadastroEstadoService;
@@ -23,7 +24,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/v1/estados")
-public class EstadoController {
+public class EstadoController implements EstadoControllerOpenApi {
 	private final EstadoRepository estadoRepository;
 	private final CadastroEstadoService cadastroEstadoService;
 	private final EstadoModelAssembler estadoModelAssembler;

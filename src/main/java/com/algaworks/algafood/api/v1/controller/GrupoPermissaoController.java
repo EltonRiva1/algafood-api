@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.assembler.PermissaoModelAssembler;
+import com.algaworks.algafood.api.v1.openapi.controller.GrupoPermissaoControllerOpenApi;
 import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.service.CadastroGrupoService;
 
 @RestController
 @RequestMapping("/v1/grupos/{grupoId}/permissoes")
-public class GrupoPermissaoController {
+public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi {
 	private final CadastroGrupoService cadastroGrupoService;
 	private final PermissaoModelAssembler permissaoModelAssembler;
 	private final AlgaLinks algaLinks;

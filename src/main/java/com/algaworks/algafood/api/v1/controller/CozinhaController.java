@@ -3,6 +3,7 @@ package com.algaworks.algafood.api.v1.controller;
 import com.algaworks.algafood.api.v1.assembler.CozinhaInputDisassembler;
 import com.algaworks.algafood.api.v1.assembler.CozinhaModelAssembler;
 import com.algaworks.algafood.api.v1.model.input.CozinhaInput;
+import com.algaworks.algafood.api.v1.openapi.controller.CozinhaControllerOpenApi;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
@@ -29,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/v1/cozinhas")
-public class CozinhaController {
+public class CozinhaController implements CozinhaControllerOpenApi {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CozinhaController.class);
 	private final CozinhaRepository cozinhaRepository;
 	private final CadastroCozinhaService cadastroCozinhaService;

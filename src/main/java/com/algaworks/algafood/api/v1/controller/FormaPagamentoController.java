@@ -20,6 +20,7 @@ import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import com.algaworks.algafood.api.v1.assembler.FormaPagamentoInputDisassembler;
 import com.algaworks.algafood.api.v1.assembler.FormaPagamentoModelAssembler;
 import com.algaworks.algafood.api.v1.model.input.FormaPagamentoInput;
+import com.algaworks.algafood.api.v1.openapi.controller.FormaPagamentoControllerOpenApi;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.repository.FormaPagamentoRepository;
 import com.algaworks.algafood.domain.service.CadastroFormaPagamentoService;
@@ -28,7 +29,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/v1/formas-pagamento")
-public class FormaPagamentoController {
+public class FormaPagamentoController implements FormaPagamentoControllerOpenApi {
 	private final FormaPagamentoRepository formaPagamentoRepository;
 	private final CadastroFormaPagamentoService cadastroFormaPagamentoService;
 	private final FormaPagamentoModelAssembler formaPagamentoModelAssembler;

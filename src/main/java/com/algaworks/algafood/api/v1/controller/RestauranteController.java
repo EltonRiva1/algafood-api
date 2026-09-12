@@ -26,16 +26,14 @@ import com.algaworks.algafood.api.v1.assembler.RestauranteBasicoModelAssembler;
 import com.algaworks.algafood.api.v1.assembler.RestauranteInputDisassembler;
 import com.algaworks.algafood.api.v1.assembler.RestauranteModelAssembler;
 import com.algaworks.algafood.api.v1.model.input.RestauranteInput;
+import com.algaworks.algafood.api.v1.openapi.controller.RestauranteControllerOpenApi;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 @RestController
 @RequestMapping(value = "/v1/restaurantes")
-public class RestauranteController {
+public class RestauranteController implements RestauranteControllerOpenApi {
 	private final RestauranteRepository restauranteRepository;
 	private final CadastroRestauranteService cadastroRestauranteService;
 	private final RestauranteModelAssembler restauranteModelAssembler;
@@ -58,9 +56,7 @@ public class RestauranteController {
 
 	@GetMapping
 	@CheckSecurity.Restaurantes.PodeConsultar
-	public ResponseEntity<CollectionModel<?>> listar(
-			@Parameter(in = ParameterIn.QUERY, name = "projecao", description = "Nome da projeção de pedidos", schema = @Schema(allowableValues = {
-					"apenas-nome" })) @RequestParam(required = false) String projecao) {
+	public ResponseEntity<CollectionModel<?>> listar(@RequestParam(required = false) String projecao) {
 		return ResponseEntity.ok(this.restauranteBasicoModelAssembler
 				.toCollectionModel(this.restauranteRepository.findAllFetchingEnderecoCidade()));
 	}

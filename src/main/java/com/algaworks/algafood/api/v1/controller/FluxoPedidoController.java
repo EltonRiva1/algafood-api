@@ -6,12 +6,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.v1.openapi.controller.FluxoPedidoControllerOpenApi;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.service.FluxoPedidoService;
 
 @RestController
 @RequestMapping("/v1/pedidos/{codigoPedido}")
-public class FluxoPedidoController {
+public class FluxoPedidoController implements FluxoPedidoControllerOpenApi {
 	private final FluxoPedidoService fluxoPedidoService;
 
 	public FluxoPedidoController(FluxoPedidoService fluxoPedidoService) {

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.v1.AlgaLinks;
+import com.algaworks.algafood.api.v1.openapi.controller.EstatisticasControllerOpenApi;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.filter.VendaDiariaFilter;
 import com.algaworks.algafood.domain.service.VendaQueryService;
@@ -19,7 +20,7 @@ import com.algaworks.algafood.domain.service.VendaReportService;
 
 @RestController
 @RequestMapping(path = "/v1/estatisticas")
-public class EstatisticasController {
+public class EstatisticasController implements EstatisticasControllerOpenApi {
 	private final VendaQueryService vendaQueryService;
 	private final VendaReportService vendaReportService;
 	private final AlgaLinks algaLinks;

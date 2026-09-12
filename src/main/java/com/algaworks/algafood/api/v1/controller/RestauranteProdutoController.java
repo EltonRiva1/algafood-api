@@ -16,6 +16,7 @@ import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.assembler.ProdutoInputDisassembler;
 import com.algaworks.algafood.api.v1.assembler.ProdutoModelAssembler;
 import com.algaworks.algafood.api.v1.model.input.ProdutoInput;
+import com.algaworks.algafood.api.v1.openapi.controller.RestauranteProdutoControllerOpenApi;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.repository.ProdutoRepository;
 import com.algaworks.algafood.domain.service.CadastroProdutoService;
@@ -25,7 +26,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/v1/restaurantes/{restauranteId}/produtos")
-public class RestauranteProdutoController {
+public class RestauranteProdutoController implements RestauranteProdutoControllerOpenApi {
 	private final ProdutoRepository produtoRepository;
 	private final CadastroProdutoService cadastroProdutoService;
 	private final CadastroRestauranteService cadastroRestauranteService;
