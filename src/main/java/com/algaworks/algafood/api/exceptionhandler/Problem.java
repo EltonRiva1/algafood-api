@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public class Problem {
 	@Schema(example = "400")
 	private final Integer status;
-	@Schema(example = "2026-09-07T11:21:50.902245498Z")
+	@Schema(description = "Data e hora em que o problema ocorreu", type = "string", format = "date-time")
 	private final OffsetDateTime timestamp;
 	@Schema(example = "https://algafood.com.br/dados-invalidos")
 	private final String type;
