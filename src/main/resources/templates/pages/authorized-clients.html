@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Aplicações autorizadas</title>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+
+<body class="bg-light">
+
+	<div class="container py-5" style="max-width: 800px">
+
+		<h1 class="h3 mb-4">Aplicações autorizadas</h1>
+
+		<div th:if="${#lists.isEmpty(clients)}" class="alert alert-info">
+
+			Nenhuma aplicação possui consentimento salvo.
+		</div>
+
+		<div class="card mb-3" th:each="client : ${clients}">
+
+			<div class="card-body">
+
+				<h2 class="h5" th:text="${client.clientName}">
+					Cliente
+				</h2>
+
+				<p class="text-muted" th:text="${client.clientId}">
+					client-id
+				</p>
+
+				<p class="mb-1">
+					<strong>Escopos permitidos:</strong>
+				</p>
+
+				<ul>
+					<li th:each="scope : ${client.scopes}" th:text="${scope}">
+						READ
+					</li>
+				</ul>
+
+				<form th:action="@{/oauth2/consents/{clientId}/revoke(clientId=${client.clientId})}" method="post">
+
+					<button type="submit" class="btn btn-danger">
+						Revogar acesso
+					</button>
+				</form>
+
+			</div>
+		</div>
+
+	</div>
+
+</body>
+
+</html>

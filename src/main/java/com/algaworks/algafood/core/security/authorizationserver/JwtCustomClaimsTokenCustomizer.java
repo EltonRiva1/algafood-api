@@ -27,7 +27,7 @@ public class JwtCustomClaimsTokenCustomizer {
 			if (principal instanceof AuthUser authUser) {
 				authorities.addAll(authUser.getAuthorities().stream().map(GrantedAuthority::getAuthority)
 						.collect(Collectors.toSet()));
-				context.getClaims().claim("usuario_id", authUser.getUsuarioId());
+				context.getClaims().claim("usuario_id", String.valueOf(authUser.getUsuarioId()));
 				context.getClaims().claim("nome_completo", authUser.getNomeCompleto());
 			} else {
 				authorities.addAll(getClientAuthorities(context));

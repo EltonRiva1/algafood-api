@@ -32,7 +32,7 @@ public class RegisteredClientInitializer implements ApplicationRunner {
 		var tokenSettings = TokenSettings.builder().accessTokenTimeToLive(Duration.ofMinutes(30))
 				.refreshTokenTimeToLive(Duration.ofDays(30)).reuseRefreshTokens(false).build();
 		saveIfMissing(RegisteredClient.withId(UUID.randomUUID().toString()).clientId("swagger-ui")
-				.clientSecret(passwordEncoder.encode("swagger123"))
+				.clientName("Swagger UI").clientSecret(passwordEncoder.encode("swagger123"))
 				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
 				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
 				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
@@ -40,23 +40,23 @@ public class RegisteredClientInitializer implements ApplicationRunner {
 				.clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
 				.tokenSettings(tokenSettings).build());
 		saveIfMissing(RegisteredClient.withId(UUID.randomUUID().toString()).clientId("algafood-web")
-				.clientSecret(passwordEncoder.encode("web123"))
+				.clientName("AlgaFood Web").clientSecret(passwordEncoder.encode("web123"))
 				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
 				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
 				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
 				.redirectUri("https://oauth.pstmn.io/v1/callback").scope("READ").scope("WRITE")
-				.clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
+				.clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
 				.tokenSettings(tokenSettings).build());
 		saveIfMissing(RegisteredClient.withId(UUID.randomUUID().toString()).clientId("foodanalytics")
-				.clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
+				.clientName("Food Analytics").clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
 				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
 				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN).redirectUri("http://localhost:8082")
 				.scope("READ").scope("WRITE")
 				.clientSettings(
-						ClientSettings.builder().requireProofKey(true).requireAuthorizationConsent(false).build())
+						ClientSettings.builder().requireProofKey(true).requireAuthorizationConsent(true).build())
 				.tokenSettings(tokenSettings).build());
 		saveIfMissing(
-				RegisteredClient.withId(UUID.randomUUID().toString()).clientId("faturamento")
+				RegisteredClient.withId(UUID.randomUUID().toString()).clientId("faturamento").clientName("Faturamento")
 						.clientSecret(passwordEncoder.encode("faturamento123"))
 						.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
 						.authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS).scope("READ").scope("WRITE")
@@ -66,7 +66,7 @@ public class RegisteredClientInitializer implements ApplicationRunner {
 								.build())
 						.tokenSettings(tokenSettings).build());
 		saveIfMissing(RegisteredClient.withId(UUID.randomUUID().toString()).clientId("checktoken")
-				.clientSecret(passwordEncoder.encode("check123"))
+				.clientName("Check Token").clientSecret(passwordEncoder.encode("check123"))
 				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
 				.authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS).scope("READ")
 				.tokenSettings(tokenSettings).build());
